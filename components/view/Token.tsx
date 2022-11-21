@@ -23,22 +23,26 @@ const Token = ({ account, tokenAddress, bridgeAddress }: Contract) => {
     const [transferDisable, setTransferDisable] = useState<boolean | undefined>(false);
     const { approveToken, getAllowance, isLoading: isApproveLoading, txHash: approveTx } = useApproveToken(contract, bridgeAddress, account);
     const { depositERC20, txHash: depositTxHash, isLoading: depositIsLoaidng, error: depositError } = useEthereumBridge(bridgeAddress);
+    const [tokenName, setTokenName] = useState<string | undefined>();
     const isValid = data !== undefined;
-
+    
     useEffect(() => {
-        console.log("useEffect", isValid);
         checkTransferDisable();
+
+        const fetchTokenName = async() => {
+            setTokenName(await contract.name());
+            console.log(tokenName);
+        }
+        fetchTokenName();
 
         contract.on('Approval', (account, bridgeAddress, formatAmount) => {
             checkTransferDisable();
         });
-    }, [isValid])
+    }, [isValid, tokenName])
     
     const checkTransferDisable = async() => {
         if (isValid) {
-            console.log(isValid);
             const tokenAllowance = await getAllowance();
-            console.log(tokenAllowance, ethers.BigNumber.from(tokenAllowance).abs() > ethers.BigNumber.from(wei("0")).abs())
             if (ethers.BigNumber.from(tokenAllowance).abs().gt(0)) {
                 setTransferDisable(false);
             } else {
@@ -64,14 +68,8 @@ const Token = ({ account, tokenAddress, bridgeAddress }: Contract) => {
     }
 
     const transfer = async() => {
-
-        const balance = await contract.balanceOf(account);
-        console.log(balance.toString(), wei(amount), ethers.BigNumber.from(balance).abs().gt(wei(amount)));
-
-
         depositERC20(tokenAddress, wei(amount));
         localStorage.setItem(JSON.stringify({account, tokenAddress}), JSON.stringify({"bridge": bridgeAddress, "amount": wei(amount)}));
-        console.log(localStorage.getItem(JSON.stringify({account, tokenAddress})));
         setAmount("");
     }
 
@@ -85,7 +83,7 @@ const Token = ({ account, tokenAddress, bridgeAddress }: Contract) => {
                     <form>
                         <table>
                             <tbody>
-                            <tr><td>{ (ethers.utils.formatEther(data) + " tokens") }</td></tr>
+                            <tr><td>{ (tokenName + " " + ethers.utils.formatEther(data) + " tokens") }</td></tr>
                             <tr>
                                 <td>Choose amount:</td>
                                 <td><input onChange={stateAmountToken} value={amount || ""} type="text" name="token_amount" /></td>
