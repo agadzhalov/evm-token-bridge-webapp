@@ -11,11 +11,7 @@ function getTokenBalance(contract: ERC20) {
   };
 }
 
-export default function useTokenBalance(
-  address: string,
-  tokenAddress: string,
-  suspense = false
-) {
+const useTokenBalance = (address: string, tokenAddress: string, suspense = false) => {
   const contract = useTokenContract(tokenAddress);
 
   const shouldFetch =
@@ -32,6 +28,7 @@ export default function useTokenBalance(
   );
 
   useKeepSWRDataLiveAsBlocksArrive(result.mutate);
-
+  
   return result;
 }
+export default useTokenBalance;

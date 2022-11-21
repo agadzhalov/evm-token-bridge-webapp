@@ -2,10 +2,11 @@ import { useWeb3React } from "@web3-react/core";
 import Head from "next/head";
 import Link from "next/link";
 import Account from "../components/Account";
+import EthereumNetwork from "../components/EthereumNetwork";
 import NativeCurrencyBalance from "../components/NativeCurrencyBalance";
 import TokenBalance from "../components/TokenBalance";
 import USLibrary from "../components/USLibrary";
-import { ALBT_TOKEN_ADDRESS, US_ELECTION_ADDRESS } from "../constants";
+import { ALBT_TOKEN_ADDRESS, ETHEREUM_TOKEN_BRIDGE, US_ELECTION_ADDRESS } from "../constants";
 import useEagerConnect from "../hooks/useEagerConnect";
 
 function Home() {
@@ -43,9 +44,7 @@ function Home() {
         {isConnected && (
           <section>
             <NativeCurrencyBalance />
-
-            <TokenBalance tokenAddress={ALBT_TOKEN_ADDRESS} symbol="ALBT" />
-            <USLibrary contractAddress={US_ELECTION_ADDRESS} />
+            <EthereumNetwork bridgeContractAddress={ETHEREUM_TOKEN_BRIDGE} />
           </section>
         )}
       </main>

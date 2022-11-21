@@ -1,0 +1,58 @@
+[
+    {
+        "inputs": [
+            {
+                "internalType": "address",
+                "name": "_sourceToken",
+                "type": "address"
+            }
+        ],
+        "name": "getRepresentativeToken",
+        "outputs": [
+            {
+                "internalType": "address",
+                "name": "",
+                "type": "address"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "address",
+                "name": "_tokenAddress",
+                "type": "address"
+            }
+        ],
+        "name": "isTokenOnPolygon",
+        "outputs": [
+            {
+                "internalType": "bool",
+                "name": "",
+                "type": "bool"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "address",
+                "name": "_sourceToken",
+                "type": "address"
+            },
+            {
+                "internalType": "address",
+                "name": "_targetToken",
+                "type": "address"
+            }
+        ],
+        "name": "setTokenOnPolygon",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+    }
+]
