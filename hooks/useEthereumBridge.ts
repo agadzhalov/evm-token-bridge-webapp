@@ -4,18 +4,18 @@ import useEthereumBridgeContract from "./useEthereumBridgeContract";
 
 const useEthereumBridge = (bridgeAddress: string) => {
     const contract = useEthereumBridgeContract(bridgeAddress);
-
+    const [txHash, setTxHash] = useState<string | undefined>();
     const [isLoading, setIsLoading] = useState<boolean | undefined>(false);
     const [error, setError] = useState<any | undefined>();
     
 
     const depositERC20 = async(tokenAddres: string, amount: string) => {
         try {
-            console.log(tokenAddres, amount);
             const tx = await contract.depositERC20(tokenAddres, amount);
             setIsLoading(true);
+            setTxHash(tx.hash);
+            await tx.wait();
             setError(null);
-            return tx.toString();
         } catch (error) {
             setError(error);
         } finally {
@@ -23,7 +23,7 @@ const useEthereumBridge = (bridgeAddress: string) => {
         }
     }
     
-    return { depositERC20 };
+    return { depositERC20, txHash, isLoading, error };
 }
 
 export default useEthereumBridge;

@@ -22,7 +22,7 @@ const Token = ({ account, tokenAddress, bridgeAddress }: Contract) => {
     const [amount, setAmount] = useState<string | undefined>();
     const [transferDisable, setTransferDisable] = useState<boolean | undefined>(false);
     const { approveToken, getAllowance, isLoading: isApproveLoading, txHash: approveTx } = useApproveToken(contract, bridgeAddress, account);
-    const { depositERC20 } = useEthereumBridge(bridgeAddress);
+    const { depositERC20, txHash: depositTxHash, isLoading: depositIsLoaidng, error: depositError } = useEthereumBridge(bridgeAddress);
     const isValid = data !== undefined;
 
     useEffect(() => {
@@ -80,7 +80,7 @@ const Token = ({ account, tokenAddress, bridgeAddress }: Contract) => {
             <div className="info">
                 { !isValid && ("Invalid ERC20 address") }
             </div>
-            { isValid && (
+            { isValid && !depositIsLoaidng && (
                 <div className="amount-section">
                     <form>
                         <table>
@@ -104,6 +104,7 @@ const Token = ({ account, tokenAddress, bridgeAddress }: Contract) => {
                     {isApproveLoading && (<PendingTX txHash={approveTx} />)}
                 </div>
             )}
+            {depositIsLoaidng && (<PendingTX txHash={depositTxHash} />)}
             
         </div>
     );
