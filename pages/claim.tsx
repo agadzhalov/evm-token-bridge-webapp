@@ -5,18 +5,15 @@ import Account from "../components/Account";
 import EthereumNetwork from "../components/EthereumNetwork";
 import Menu from "../components/Menu";
 import NativeCurrencyBalance from "../components/NativeCurrencyBalance";
-import TokenBalance from "../components/TokenBalance";
-import USLibrary from "../components/USLibrary";
 import { ALBT_TOKEN_ADDRESS, ETHEREUM_TOKEN_BRIDGE, US_ELECTION_ADDRESS } from "../constants";
 import useEagerConnect from "../hooks/useEagerConnect";
 
-function Home() {
+function Claim() {
   const { account, library } = useWeb3React();
 
   const triedToEagerConnect = useEagerConnect();
 
   const isConnected = typeof account === "string" && !!library;
-
   return (
     <div>
       <Head>
@@ -35,14 +32,16 @@ function Home() {
       </header>
 
       <main>
-        <Menu page="Transfer" />
+        
+        <Menu page="Claim" />
+        
         {isConnected && (
           <section>
             <NativeCurrencyBalance />
-            <EthereumNetwork bridgeContractAddress={ETHEREUM_TOKEN_BRIDGE} />
           </section>
         )}
       </main>
+
       <style jsx>{`
         nav {
           display: flex;
@@ -57,4 +56,4 @@ function Home() {
   );
 }
 
-export default Home;
+export default Claim;
