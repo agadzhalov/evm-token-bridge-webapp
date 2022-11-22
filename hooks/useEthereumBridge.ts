@@ -9,12 +9,13 @@ const useEthereumBridge = (bridgeAddress: string) => {
     const [error, setError] = useState<any | undefined>();
     
 
-    const depositERC20 = async(tokenAddres: string, amount: string) => {
+    const depositERC20 = async(account: string, tokenAddres: string, amount: string) => {
         try {
             const tx = await contract.depositERC20(tokenAddres, amount);
             setIsLoading(true);
             setTxHash(tx.hash);
             await tx.wait();
+            upadteLocalStorage(account, tokenAddres, amount);
             setError(null);
         } catch (error) {
             setError(error);
@@ -24,6 +25,19 @@ const useEthereumBridge = (bridgeAddress: string) => {
     }
     
     return { depositERC20, txHash, isLoading, error };
+}
+
+const upadteLocalStorage = (account: string, tokenAddres: string, amount: string) => {
+    if (localStorage.getItem("transferToken") == null) {
+        localStorage.setItem("transferToken", "[]");
+    }
+    let store = JSON.parse(localStorage.getItem("transferToken"));
+    store.push({
+        "account": account,
+        "token": tokenAddres,
+        "amount": amount
+    })
+    localStorage.setItem("transferToken", JSON.stringify(store));
 }
 
 export default useEthereumBridge;

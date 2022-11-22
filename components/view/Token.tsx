@@ -68,8 +68,7 @@ const Token = ({ account, tokenAddress, bridgeAddress }: Contract) => {
     }
 
     const transfer = async() => {
-        depositERC20(tokenAddress, wei(amount));
-        localStorage.setItem(JSON.stringify({account, tokenAddress}), JSON.stringify({"bridge": bridgeAddress, "amount": wei(amount)}));
+        depositERC20(account, tokenAddress, wei(amount));
         setAmount("");
     }
 
