@@ -41,22 +41,21 @@ const useEthereumBridge = (bridgeAddress: string) => {
 
 const upadteLocalStorage = (account: string, tokenAddres: string, amount: string) => {
     if (localStorage.getItem("transferToken") == null) {
-        localStorage.setItem("transferToken", JSON.stringify("[]"));
-    } else {
-        let store = JSON.parse(localStorage.getItem("transferToken"));
-        console.log(store);
-        const id = store.length == 0 ? 1 : store[store.length - 1].id + 1;
-        store.push({
-            "id": id,
-            "from": "ethereum",
-            "to": "polygon",
-            "account": account,
-            "token": tokenAddres,
-            "amount": amount,
-            "claimed": false
-        });
-        localStorage.setItem("transferToken", JSON.stringify(store));
+        localStorage.setItem("transferToken", "[]");
     }
+    let store = JSON.parse(localStorage.getItem("transferToken"));
+    console.log(account, tokenAddres, amount)
+    const id = store.length == 0 ? 1 : store[store.length - 1].id + 1;
+    store.push({
+        "id": id,
+        "from": "ethereum",
+        "to": "polygon",
+        "account": account,
+        "token": tokenAddres,
+        "amount": amount,
+        "claimed": false
+    });
+    localStorage.setItem("transferToken", JSON.stringify(store));
 }
 
 const claimLocalStorage = (id: number, account: string, tokenAddres: string, amount: string) => {
