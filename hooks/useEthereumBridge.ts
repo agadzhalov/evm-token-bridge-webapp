@@ -11,7 +11,7 @@ const useEthereumBridge = (bridgeAddress: string) => {
 
     const depositERC20 = async(account: string, tokenAddres: string, amount: string) => {
         try {
-            const tx = await contract.depositERC20(tokenAddres, amount);
+            const tx = await contract.lock(tokenAddres, amount);
             setIsLoading(true);
             setTxHash(tx.hash);
             await tx.wait();
@@ -33,10 +33,13 @@ const upadteLocalStorage = (account: string, tokenAddres: string, amount: string
     }
     let store = JSON.parse(localStorage.getItem("transferToken"));
     store.push({
+        "from": "ethereum",
+        "to": "polygon",
         "account": account,
         "token": tokenAddres,
-        "amount": amount
-    })
+        "amount": amount,
+        "claimed": false
+    });
     localStorage.setItem("transferToken", JSON.stringify(store));
 }
 

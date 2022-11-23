@@ -2,6 +2,7 @@ import { useWeb3React } from "@web3-react/core";
 import Head from "next/head";
 import Link from "next/link";
 import Account from "../components/Account";
+import ClaimView from "../components/Claim";
 import EthereumNetwork from "../components/EthereumNetwork";
 import Menu from "../components/Menu";
 import NativeCurrencyBalance from "../components/NativeCurrencyBalance";
@@ -38,6 +39,7 @@ function Claim() {
         {isConnected && (
           <section>
             <NativeCurrencyBalance />
+            <ClaimView />
           </section>
         )}
       </main>

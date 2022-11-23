@@ -1,7 +1,7 @@
-import ETHEREUM_BRIDGE_ABI from "../contracts/EthereumBridge.json";
-import type { EthereumBridge } from "../contracts/types";
+import BRIDGE_ABI from "../contracts/Bridge.json";
+import type { Bridge } from "../contracts/types";
 import useContract from "./useContract";
 
 export default function useEthereumBridgeContract(contractAddress?: string) {
-  return useContract<EthereumBridge>(contractAddress, ETHEREUM_BRIDGE_ABI);
+  return useContract<Bridge>(contractAddress, BRIDGE_ABI);
 }

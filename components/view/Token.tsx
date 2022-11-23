@@ -31,7 +31,6 @@ const Token = ({ account, tokenAddress, bridgeAddress }: Contract) => {
 
         const fetchTokenName = async() => {
             setTokenName(await contract.name());
-            console.log(tokenName);
         }
         fetchTokenName();
 
