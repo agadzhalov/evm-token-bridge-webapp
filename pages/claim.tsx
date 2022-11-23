@@ -39,7 +39,7 @@ function Claim() {
         {isConnected && (
           <section>
             <NativeCurrencyBalance />
-            <ClaimView />
+            <ClaimView bridgeAddress={ETHEREUM_TOKEN_BRIDGE} />
           </section>
         )}
       </main>
