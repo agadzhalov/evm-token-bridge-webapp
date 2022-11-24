@@ -24,11 +24,13 @@ const useEthereumBridge = (bridgeAddress: string) => {
         }
     }
     
-    const claimTokens = async(id: number, account: string, tokenAddres: string, amount: string) => {
+    const claimTokens = async(id: number, account: string, tokenAddres: string, amount: string, tokenName: string, tokenSymobl: string) => {
         try {
-            const tx = await contract.claimTokens(tokenAddres, "NameEvent", "SymbolEvent", amount);
+            const tx = await contract.claimTokens(tokenAddres, tokenName, tokenSymobl, amount);
             await tx.wait();
             claimLocalStorage(id, account, amount, amount);
+            const getTargetTokenTx = await contract.getTargetTokenFromSource(tokenAddres);
+            console.log(getTargetTokenTx);
         } catch (error) {
             
         } finally {

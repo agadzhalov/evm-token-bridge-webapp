@@ -2,6 +2,7 @@ import { useWeb3React } from "@web3-react/core";
 import { ethers } from "ethers";
 import { useEffect, useState } from "react";
 import useEthereumBridge from "../hooks/useEthereumBridge";
+import ClaimTableButton from "./view/ClaimTableButton";
 import ClaimTableRow from "./view/ClaimTableRow";
 
 type Props = {
@@ -10,8 +11,6 @@ type Props = {
 
 const ClaimView = ({bridgeAddress}: Props) => {
     const { account, library } = useWeb3React();
-
-    const { claimTokens } = useEthereumBridge(bridgeAddress);
     const [claimData, setClaimData] = useState<any | undefined>();
     
     useEffect(() => {
@@ -41,7 +40,7 @@ const ClaimView = ({bridgeAddress}: Props) => {
                         <td>{data.to}</td>
                         <td><ClaimTableRow tokenAddress={data.token} /></td>
                         <td>{ethers.utils.formatEther(data.amount)}</td>
-                        <td><input type="button" value="Claim" onClick={() => claimTokens(data.id, account, data.token, data.amount)} disabled={data.claimed} /></td>
+                        <td><ClaimTableButton bridgeAddress={bridgeAddress} tokenAddress={data.token} account={account} data={data} /></td>
                     </tr>
                     )
                 })}
