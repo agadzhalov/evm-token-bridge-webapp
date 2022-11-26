@@ -8,7 +8,7 @@ import NativeCurrencyBalance from "../components/NativeCurrencyBalance";
 import SwitchNetwork from "../components/SwitchNetwork";
 import TokenBalance from "../components/TokenBalance";
 import USLibrary from "../components/USLibrary";
-import { ALBT_TOKEN_ADDRESS, ETHEREUM_TOKEN_BRIDGE, US_ELECTION_ADDRESS } from "../constants";
+import { ALBT_TOKEN_ADDRESS, ETHEREUM_BRIDGE_GOERLI, ETHEREUM_TOKEN_BRIDGE, US_ELECTION_ADDRESS } from "../constants";
 import useEagerConnect from "../hooks/useEagerConnect";
 
 function Home() {
@@ -36,12 +36,13 @@ function Home() {
       </header>
 
       <main>
-        <Menu page="Transfer" />
+        
         {isConnected && (
           <section>
+            <NativeCurrencyBalance />
+            <Menu page="Transfer" />
             <SwitchNetwork />
-            {/* <NativeCurrencyBalance />
-            <EthereumNetwork bridgeContractAddress={ETHEREUM_TOKEN_BRIDGE} /> */}
+            <EthereumNetwork bridgeContractAddress={ETHEREUM_BRIDGE_GOERLI} />
           </section>
         )}
       </main>

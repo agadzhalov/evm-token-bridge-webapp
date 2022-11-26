@@ -95,7 +95,6 @@ const Token = ({ account, tokenAddress, bridgeAddress }: Contract) => {
                     <div className="buttons">
                         <input type="button" value="Approve" onClick={() => approveToken(wei(amount))} />
                         <input type="button" value="Transfer" onClick={() => transfer()} disabled={transferDisable} /><br/>
-                        <input type="button" value="Send" />
                     </div>
                     )}
                     {isApproveLoading && (<PendingTX txHash={approveTx} />)}
