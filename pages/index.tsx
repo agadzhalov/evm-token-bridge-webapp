@@ -5,6 +5,7 @@ import Account from "../components/Account";
 import EthereumNetwork from "../components/EthereumNetwork";
 import Menu from "../components/Menu";
 import NativeCurrencyBalance from "../components/NativeCurrencyBalance";
+import SwitchNetwork from "../components/SwitchNetwork";
 import TokenBalance from "../components/TokenBalance";
 import USLibrary from "../components/USLibrary";
 import { ALBT_TOKEN_ADDRESS, ETHEREUM_TOKEN_BRIDGE, US_ELECTION_ADDRESS } from "../constants";
@@ -38,8 +39,9 @@ function Home() {
         <Menu page="Transfer" />
         {isConnected && (
           <section>
-            <NativeCurrencyBalance />
-            <EthereumNetwork bridgeContractAddress={ETHEREUM_TOKEN_BRIDGE} />
+            <SwitchNetwork />
+            {/* <NativeCurrencyBalance />
+            <EthereumNetwork bridgeContractAddress={ETHEREUM_TOKEN_BRIDGE} /> */}
           </section>
         )}
       </main>
