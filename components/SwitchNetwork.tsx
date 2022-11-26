@@ -30,8 +30,8 @@ const networks = {
 };
 
 export default function SwitchNetwork() {
-    const { library, chainId } = useWeb3React<Web3Provider>();
-    const [error, setError] = useState();   
+    const { account, library, chainId } = useWeb3React<Web3Provider>();
+    const [error, setError] = useState();
 
     const handleNetworkSwitch = async (networkName) => {
         try {

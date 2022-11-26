@@ -8,11 +8,11 @@ import NativeCurrencyBalance from "../components/NativeCurrencyBalance";
 import SwitchNetwork from "../components/SwitchNetwork";
 import TokenBalance from "../components/TokenBalance";
 import USLibrary from "../components/USLibrary";
-import { ALBT_TOKEN_ADDRESS, ETHEREUM_BRIDGE_GOERLI, ETHEREUM_TOKEN_BRIDGE, US_ELECTION_ADDRESS } from "../constants";
+import { ALBT_TOKEN_ADDRESS, ETHEREUM_BRIDGE_GOERLI, ETHEREUM_TOKEN_BRIDGE, POLYGON_BRIDGE_MUMBAI, US_ELECTION_ADDRESS } from "../constants";
 import useEagerConnect from "../hooks/useEagerConnect";
 
 function Home() {
-  const { account, library } = useWeb3React();
+  const { account, library, chainId } = useWeb3React();
 
   const triedToEagerConnect = useEagerConnect();
 
@@ -42,7 +42,8 @@ function Home() {
             <NativeCurrencyBalance />
             <Menu page="Transfer" />
             <SwitchNetwork />
-            <EthereumNetwork bridgeContractAddress={ETHEREUM_BRIDGE_GOERLI} />
+            {chainId == 5 && (<EthereumNetwork bridgeContractAddress={ETHEREUM_BRIDGE_GOERLI} />)}
+            {chainId == 80001 && (<EthereumNetwork bridgeContractAddress={POLYGON_BRIDGE_MUMBAI} />)}
           </section>
         )}
       </main>

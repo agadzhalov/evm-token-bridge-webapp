@@ -6,6 +6,7 @@ import { ETHEREUM_TOKEN_BRIDGE } from "../constants";
 import useEthereumBridgeContract from "../hooks/useEthereumBridgeContract";
 import useTokenBalance from "../hooks/useTokenBalance";
 import Token from "./view/Token";
+import TokenPolygon from "./view/TokenPolygon";
 
 
 type Contract = {
@@ -15,7 +16,7 @@ type Contract = {
 
 const EthereumNetwork = ({ bridgeContractAddress }: Contract) => {
     const [tokenAddress, setTokenAddress] = useState<string | undefined>();
-    const { account, library } = useWeb3React<Web3Provider>();
+    const { account, library, chainId } = useWeb3React<Web3Provider>();
 
     useEffect(() => {
         setTokenAddress(tokenAddress); //"0x5FbDB2315678afecb367f032d93F642f64180aa3"
@@ -34,7 +35,8 @@ const EthereumNetwork = ({ bridgeContractAddress }: Contract) => {
             <label>Token Address</label>
             <input onChange={stateTokenAddress} value={tokenAddress || ''} type="text" name="token_address" />
             <br/><br/>
-            {isValidAddress() && (<Token account={account} tokenAddress={tokenAddress || ''} bridgeAddress={ETHEREUM_TOKEN_BRIDGE} />)}
+            {isValidAddress() && chainId == 5 && (<Token account={account} tokenAddress={tokenAddress || ''} bridgeAddress={bridgeContractAddress} />)}
+            {isValidAddress() && chainId == 80001 && (<TokenPolygon account={account} tokenAddress={tokenAddress || ''} bridgeAddress={bridgeContractAddress} />)}
             {!isValidAddress() && tokenAddress !== undefined && tokenAddress.length > 0 && ("Please enter valid address")}
             <style jsx>{`
             .results-form {
