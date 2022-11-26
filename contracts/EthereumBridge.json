@@ -1,22 +1,17 @@
 [
     {
-        "inputs": [],
-        "stateMutability": "nonpayable",
-        "type": "constructor"
-    },
-    {
         "anonymous": false,
         "inputs": [
             {
                 "indexed": false,
                 "internalType": "address",
-                "name": "_from",
+                "name": "_sourceToken",
                 "type": "address"
             },
             {
                 "indexed": false,
                 "internalType": "address",
-                "name": "_recipient",
+                "name": "_spender",
                 "type": "address"
             },
             {
@@ -26,14 +21,14 @@
                 "type": "uint256"
             }
         ],
-        "name": "DepositTokens",
+        "name": "LockTokens",
         "type": "event"
     },
     {
         "inputs": [
             {
                 "internalType": "address",
-                "name": "_tokenAddress",
+                "name": "_sourceToken",
                 "type": "address"
             },
             {
@@ -42,7 +37,7 @@
                 "type": "uint256"
             }
         ],
-        "name": "depositERC20",
+        "name": "lock",
         "outputs": [],
         "stateMutability": "nonpayable",
         "type": "function"
@@ -52,12 +47,30 @@
         "name": "token",
         "outputs": [
             {
-                "internalType": "contract IERC20",
+                "internalType": "contract BaseToken",
                 "name": "",
                 "type": "address"
             }
         ],
         "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "address",
+                "name": "_targetToken",
+                "type": "address"
+            },
+            {
+                "internalType": "uint256",
+                "name": "_amount",
+                "type": "uint256"
+            }
+        ],
+        "name": "unlock",
+        "outputs": [],
+        "stateMutability": "nonpayable",
         "type": "function"
     }
 ]
