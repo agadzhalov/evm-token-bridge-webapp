@@ -70,18 +70,10 @@ export default function SwitchNetwork() {
                 </p>
                 <div className="mt-4">
                 <button
-                        onClick={() => handleNetworkSwitch(5)}
+                        onClick={() => handleNetworkSwitch(chainId == 5 ? 80001 : chainId == 80001 ? 5 : 0)}
                         className="mt-2 mb-2 bg-warning border-warning btn submit-button focus:ring focus:outline-none w-full"
-                        disabled={chainId == 5}
                     >
-                        Switch to GOERLI
-                    </button>
-                    <button
-                        onClick={() => handleNetworkSwitch(80001)}
-                        className="mt-2 mb-2 btn btn-primary submit-button focus:ring focus:outline-none w-full"
-                        disabled={chainId == 80001}
-                    >
-                        Switch to Mumbai
+                        Switch to { chainId == 5 ? "Mumbai" : chainId == 80001 ? "Goerli" : "Error" }
                     </button>
                 </div>
             </main>
