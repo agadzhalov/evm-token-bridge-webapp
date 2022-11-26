@@ -31,7 +31,7 @@ const networks = {
 
 export default function SwitchNetwork() {
     const { library, chainId } = useWeb3React<Web3Provider>();
-    const [error, setError] = useState();
+    const [error, setError] = useState();   
 
     const handleNetworkSwitch = async (networkName) => {
         try {
@@ -65,18 +65,23 @@ export default function SwitchNetwork() {
     return (
         <div className="credit-card w-full lg:w-1/2 sm:w-auto shadow-lg mx-auto rounded-xl bg-white">
             <main className="mt-4 p-4">
+                <p>
+                    Current: <b>{ chainId == 5 ? "Goerli" : chainId == 80001 ? "Mumbai" : "Error" }</b>
+                </p>
                 <div className="mt-4">
-                    <button
-                        onClick={() => handleNetworkSwitch(137)}
-                        className="mt-2 mb-2 btn btn-primary submit-button focus:ring focus:outline-none w-full"
-                    >
-                        Switch to Mumbai
-                    </button>
-                    <button
+                <button
                         onClick={() => handleNetworkSwitch(5)}
                         className="mt-2 mb-2 bg-warning border-warning btn submit-button focus:ring focus:outline-none w-full"
+                        disabled={chainId == 5}
                     >
                         Switch to GOERLI
+                    </button>
+                    <button
+                        onClick={() => handleNetworkSwitch(80001)}
+                        className="mt-2 mb-2 btn btn-primary submit-button focus:ring focus:outline-none w-full"
+                        disabled={chainId == 80001}
+                    >
+                        Switch to Mumbai
                     </button>
                 </div>
             </main>
