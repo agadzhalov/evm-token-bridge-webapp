@@ -3,8 +3,9 @@ import { ethers } from "ethers";
 import { useEffect, useState } from "react";
 import useEthereumBridge from "../../hooks/useEthereumBridge";
 import { shortenHex } from "../../util";
-import ClaimTableButton from "./ClaimTableButton";
 import ClaimTableRow from "../view/ClaimTableRow";
+import usePolygonBridge from "../../hooks/usePolygonBridge";
+import PendingTX from "../view/PendingTX";
 
 type Props = {
     bridgeAddress: string;
@@ -12,6 +13,7 @@ type Props = {
 
 const PolygonClaimView = ({bridgeAddress}: Props) => {
     const { account, library, chainId } = useWeb3React();
+    const { claimPolygonTokens, isClaimLoading, txHashClaim, claimError } = usePolygonBridge(bridgeAddress);
     const [claimData, setClaimData] = useState<any | undefined>();
     
     
@@ -28,30 +30,35 @@ const PolygonClaimView = ({bridgeAddress}: Props) => {
 
     return (
         <div className="results-form">
-            <table>
-                <thead>
-                    <tr>
-                        <th>from</th>
-                        <th>to</th>
-                        <th>token</th>
-                        <th>amount</th>
-                        <th>action</th>
-                    </tr>
-                </thead>
-                <tbody>
-                {claimData && claimData.filter(data => data.to == getNetworkName(chainId)).map((data, index) => {
-                    return (
-                    <tr key={index}>
-                        <td>{data.from}</td>
-                        <td>{data.to}</td>
-                        <td>{data.symbol ? "W" + data.symbol : "----"} | {shortenHex(data.token, 4)}</td>
-                        <td>{ethers.utils.formatEther(data.amount)}</td>
-                        <td><ClaimTableButton bridgeAddress={bridgeAddress} tokenAddress={data.token} account={account} data={data} /></td>
-                    </tr>
-                    )
-                })}
-                </tbody>
-            </table>
+            {!isClaimLoading && (
+                <table>
+                    <thead>
+                        <tr>
+                            <th>from</th>
+                            <th>to</th>
+                            <th>token</th>
+                            <th>amount</th>
+                            <th>action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {claimData && claimData.filter(data => data.to == getNetworkName(chainId)).map((data, index) => {
+                            return (
+                                <tr key={index}>
+                                    <td>{data.from}</td>
+                                    <td>{data.to}</td>
+                                    <td>{data.symbol ? "W" + data.symbol : "----"} | {shortenHex(data.token, 4)}</td>
+                                    <td>{ethers.utils.formatEther(data.amount)}</td>
+                                    <td> <input type="button" value="Claim"
+                                        onClick={() => claimPolygonTokens(data.id, account, data.token, data.amount, data.name, data.symbol)} disabled={data.claimed} /></td>
+                                </tr>
+                            )
+                        })}
+                    </tbody>
+                </table>
+            )}
+            {isClaimLoading && (<PendingTX txHash={txHashClaim} />)}
+            {claimError && (JSON.stringify(claimError))}
             <style jsx>{`
             .results-form {
                 width: 50%;

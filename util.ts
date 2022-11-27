@@ -31,6 +31,26 @@ export function formatEtherscanLink(
   }
 }
 
+const POLYGONCAN_PREFIXES = {
+  80001: "mumbai."
+};
+
+export function formatPolygonscanLink(
+  type: "Account" | "Transaction",
+  data: [number, string]
+) {
+  switch (type) {
+    case "Account": {
+      const [chainId, address] = data;
+      return `https://${POLYGONCAN_PREFIXES[chainId]}polygonscan.com/address/${address}`;
+    }
+    case "Transaction": {
+      const [chainId, hash] = data;
+      return `https://${POLYGONCAN_PREFIXES[chainId]}polygonscan.com/tx/${hash}`;
+    }
+  }
+}
+
 export const parseBalance = (
   value: BigNumberish,
   decimals = 18,

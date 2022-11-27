@@ -9,32 +9,36 @@ import usePolygonBridgeContract from "./usePolygonBridgeContract";
 const usePolygonBridge = (bridgeAddress: string) => {
     const { library, chainId } = useWeb3React<Web3Provider>();
     const contract = usePolygonBridgeContract(bridgeAddress);
-    const [txHash, setTxHash] = useState<string | undefined>();
-    const [isLoading, setIsLoading] = useState<boolean | undefined>(false);
-    const [error, setError] = useState<any | undefined>();
-    
-    const claimTokens = async(id: string, account: string, tokenAddres: string, amount: string, tokenName: string, tokenSymobl: string) => {
+
+    const [txHashClaim, setTxHashClaim] = useState<string | undefined>();
+    const [isClaimLoading, setIsClaimLoading] = useState<boolean | undefined>(false);
+    const [claimError, setClaimError] = useState<any | undefined>();
+
+    const claimPolygonTokens = async(id: string, account: string, tokenAddres: string, amount: string, tokenName: string, tokenSymobl: string) => {
         const owner = await library.getSigner();
         try {
-            console.log("loading")
+            
             const messageHash = ethers.utils.solidityKeccak256(['string'], ["signed message to claim tokens"]);
             const arrayfiedHash = ethers.utils.arrayify(messageHash);
             const signature = await owner.signMessage(arrayfiedHash);
             
             const sig = ethers.utils.splitSignature(signature);
             const tx = await contract.claimTokens(tokenAddres, tokenName, tokenSymobl, amount, messageHash, sig.v, sig.r, sig.s);
+            setIsClaimLoading(true);
+            setTxHashClaim(tx.hash);
             await tx.wait();
+            
             claimLocalStorage(id, account, amount, amount);
             const getTargetTokenTx = await contract.getTargetTokenFromSource(tokenAddres);
-            console.log(getTargetTokenTx);
         } catch (error) {
             console.log(error);
+            setClaimError(error);
         } finally {
-            
+            setIsClaimLoading(false);
         }
     }
     
-    return { claimTokens, txHash, isLoading, error,  };
+    return { claimPolygonTokens, txHashClaim, isClaimLoading, claimError  };
 }
 
 
