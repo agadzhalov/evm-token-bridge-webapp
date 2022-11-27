@@ -36,9 +36,6 @@ const EthereumNetwork = ({ bridgeContractAddress }: Contract) => {
     
     return (
         <div className="results-form">
-            <label>Token BY Address</label>
-            <input onChange={stateTokenAddress} value={tokenAddress || ''} type="text" name="token_address" />
-            <br/>
             <label>Tokens from wallet</label>
             {isLoadingTokens && ("Loading tokens from wallet ....")}
             {!isLoadingTokens && walletTokens && (
@@ -54,10 +51,11 @@ const EthereumNetwork = ({ bridgeContractAddress }: Contract) => {
                     })}
                 </select>
             )}
-            
+            <br/>
+            <label>Token BY Address</label>
+            <input onChange={stateTokenAddress} value={tokenAddress || ''} type="text" name="token_address" />
             <br/><br/>
             {isValidAddress() && chainId == 5 && (<EthereumToken account={account} tokenAddress={tokenAddress || ''} bridgeAddress={bridgeContractAddress} />)}
-            {/* {isValidAddress() && chainId == 80001 && (<TokenPolygon account={account} tokenAddress={tokenAddress || ''} bridgeAddress={bridgeContractAddress} />)} */}
             {!isValidAddress() && tokenAddress !== undefined && tokenAddress.length > 0 && ("Please enter valid address")}
             <style jsx>{`
             .results-form {

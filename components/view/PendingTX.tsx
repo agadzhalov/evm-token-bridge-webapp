@@ -10,7 +10,6 @@ const PendingTX = ({txHash} : PendingTXProps) => {
 
   return (
     <div>
-      pending and { txHash + " hash" }
       { txHash && (
         <div>
           <h1>TX is pending</h1>
