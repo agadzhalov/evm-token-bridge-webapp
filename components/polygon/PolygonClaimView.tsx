@@ -42,7 +42,7 @@ const PolygonClaimView = ({bridgeAddress}: Props) => {
                         </tr>
                     </thead>
                     <tbody>
-                        {claimData && claimData.filter(data => data.to == getNetworkName(chainId)).map((data, index) => {
+                        {claimData && claimData.filter(data => data.account == account && data.to == getNetworkName(chainId)).map((data, index) => {
                             return (
                                 <tr key={index}>
                                     <td>{data.from}</td>
