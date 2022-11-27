@@ -7,7 +7,7 @@ import useApproveToken from "../../hooks/useApproveToken";
 import useEthereumBridge from "../../hooks/useEthereumBridge";
 import useTokenBalance from "../../hooks/useTokenBalance";
 import useTokenContract from "../../hooks/useTokenContract";
-import PendingTX from "./PendingTX";
+import PendingTX from "../view/PendingTX";
 
 type Contract = {
     account: any;
@@ -15,7 +15,7 @@ type Contract = {
     bridgeAddress: string;
 };
 
-const TokenPolygon = ({ account, tokenAddress, bridgeAddress }: Contract) => {
+const PolygonToken = ({ account, tokenAddress, bridgeAddress }: Contract) => {
     const contract = useTokenContract(tokenAddress);
     const [isTokenValid, setTokenValid] = useState<boolean | undefined>();
     const { library, chainId } = useWeb3React<Web3Provider>();
@@ -32,11 +32,10 @@ const TokenPolygon = ({ account, tokenAddress, bridgeAddress }: Contract) => {
     return (
         <div className="results-form">
             <div className="info">
-                {isTokenValid + " isValid"}
-                
+                {isTokenValid + " isValid"}  
             </div>
         </div>
     );
 };
 
-export default TokenPolygon;
+export default PolygonToken;

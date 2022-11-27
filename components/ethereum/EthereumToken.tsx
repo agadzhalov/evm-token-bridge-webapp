@@ -7,7 +7,7 @@ import useApproveToken from "../../hooks/useApproveToken";
 import useEthereumBridge from "../../hooks/useEthereumBridge";
 import useTokenBalance from "../../hooks/useTokenBalance";
 import useTokenContract from "../../hooks/useTokenContract";
-import PendingTX from "./PendingTX";
+import PendingTX from "../view/PendingTX";
 
 type Contract = {
     account: any;
@@ -15,7 +15,7 @@ type Contract = {
     bridgeAddress: string;
 };
 
-const Token = ({ account, tokenAddress, bridgeAddress }: Contract) => {
+const EthereumToken = ({ account, tokenAddress, bridgeAddress }: Contract) => {
     const contract = useTokenContract(tokenAddress);
     const { data } = useTokenBalance(account, tokenAddress);
 
@@ -67,7 +67,9 @@ const Token = ({ account, tokenAddress, bridgeAddress }: Contract) => {
     }
 
     const transfer = async() => {
-        depositERC20(account, tokenAddress, wei(amount));
+        const name = await contract.name();
+        const symbol = await contract.symbol();
+        depositERC20(account, tokenAddress, name, symbol, wei(amount));
         setAmount("");
     }
 
@@ -106,4 +108,4 @@ const Token = ({ account, tokenAddress, bridgeAddress }: Contract) => {
     );
 };
 
-export default Token;
+export default EthereumToken;

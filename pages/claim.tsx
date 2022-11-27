@@ -2,15 +2,16 @@ import { useWeb3React } from "@web3-react/core";
 import Head from "next/head";
 import Link from "next/link";
 import Account from "../components/Account";
-import ClaimView from "../components/Claim";
-import EthereumNetwork from "../components/EthereumNetwork";
+import PolygonClaimView from "../components/polygon/PolygonClaimView";
+import EthereumNetwork from "../components/ethereum/EthereumNetwork";
 import Menu from "../components/Menu";
 import NativeCurrencyBalance from "../components/NativeCurrencyBalance";
-import { ALBT_TOKEN_ADDRESS, ETHEREUM_TOKEN_BRIDGE, US_ELECTION_ADDRESS } from "../constants";
+import SwitchNetwork from "../components/SwitchNetwork";
+import { ETHEREUM_TOKEN_BRIDGE, POLYGON_BRIDGE_MUMBAI } from "../constants";
 import useEagerConnect from "../hooks/useEagerConnect";
 
 function Claim() {
-  const { account, library } = useWeb3React();
+  const { account, library, chainId } = useWeb3React();
 
   const triedToEagerConnect = useEagerConnect();
 
@@ -33,13 +34,13 @@ function Claim() {
       </header>
 
       <main>
-        
-        <Menu page="Claim" />
-        
+              
         {isConnected && (
           <section>
             <NativeCurrencyBalance />
-            <ClaimView bridgeAddress={ETHEREUM_TOKEN_BRIDGE} />
+            <Menu page="Claim" />
+            <SwitchNetwork />
+            <PolygonClaimView bridgeAddress={POLYGON_BRIDGE_MUMBAI} />
           </section>
         )}
       </main>

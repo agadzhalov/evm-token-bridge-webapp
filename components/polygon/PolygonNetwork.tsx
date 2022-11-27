@@ -1,22 +1,17 @@
 import type { Web3Provider } from "@ethersproject/providers";
 import { useWeb3React } from "@web3-react/core";
 import { ethers } from "ethers";
-import { useCallback, useEffect, useState } from "react";
-import { ETHEREUM_TOKEN_BRIDGE } from "../constants";
-import useEthereumBridgeContract from "../hooks/useEthereumBridgeContract";
-import useGetWalletTokens from "../hooks/useGetWalletTokens";
-import useTokenBalance from "../hooks/useTokenBalance";
-import { shortenHex } from "../util";
-import Token from "./view/Token";
-import TokenPolygon from "./view/TokenPolygon";
-
+import { useEffect, useState } from "react";
+import useGetWalletTokens from "../../hooks/useGetWalletTokens";
+import { shortenHex } from "../../util";
+import PolygonToken from "./PolygonToken";
 
 type Contract = {
     handleRetrieveTokenByAddress?: any;
     bridgeContractAddress: string;
 };
 
-const EthereumNetwork = ({ bridgeContractAddress }: Contract) => {
+const PolygonNetwork = ({ bridgeContractAddress }: Contract) => {
     const [tokenAddress, setTokenAddress] = useState<string | undefined>();
     const { account, library, chainId } = useWeb3React<Web3Provider>();
     const { getTokens, isLoadingTokens } = useGetWalletTokens();
@@ -61,8 +56,7 @@ const EthereumNetwork = ({ bridgeContractAddress }: Contract) => {
             )}
             
             <br/><br/>
-            {isValidAddress() && chainId == 5 && (<Token account={account} tokenAddress={tokenAddress || ''} bridgeAddress={bridgeContractAddress} />)}
-            {isValidAddress() && chainId == 80001 && (<TokenPolygon account={account} tokenAddress={tokenAddress || ''} bridgeAddress={bridgeContractAddress} />)}
+            {isValidAddress() && chainId == 80001 && (<PolygonToken account={account} tokenAddress={tokenAddress || ''} bridgeAddress={bridgeContractAddress} />)}
             {!isValidAddress() && tokenAddress !== undefined && tokenAddress.length > 0 && ("Please enter valid address")}
             <style jsx>{`
             .results-form {
@@ -75,4 +69,4 @@ const EthereumNetwork = ({ bridgeContractAddress }: Contract) => {
     );
 };
 
-export default EthereumNetwork;
+export default PolygonNetwork;

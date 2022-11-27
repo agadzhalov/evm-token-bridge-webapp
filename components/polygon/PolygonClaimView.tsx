@@ -1,17 +1,19 @@
 import { useWeb3React } from "@web3-react/core";
 import { ethers } from "ethers";
 import { useEffect, useState } from "react";
-import useEthereumBridge from "../hooks/useEthereumBridge";
-import ClaimTableButton from "./view/ClaimTableButton";
-import ClaimTableRow from "./view/ClaimTableRow";
+import useEthereumBridge from "../../hooks/useEthereumBridge";
+import { shortenHex } from "../../util";
+import ClaimTableButton from "./ClaimTableButton";
+import ClaimTableRow from "../view/ClaimTableRow";
 
 type Props = {
     bridgeAddress: string;
 }
 
-const ClaimView = ({bridgeAddress}: Props) => {
-    const { account, library } = useWeb3React();
+const PolygonClaimView = ({bridgeAddress}: Props) => {
+    const { account, library, chainId } = useWeb3React();
     const [claimData, setClaimData] = useState<any | undefined>();
+    
     
     useEffect(() => {
         setClaimData(JSON.parse(localStorage.getItem("transferToken")));
@@ -19,6 +21,10 @@ const ClaimView = ({bridgeAddress}: Props) => {
             setClaimData(JSON.parse(localStorage.getItem("transferToken")));
         });
     }, [])
+
+    const getNetworkName = (chainId: any) => {
+        return chainId == 5 ? "goerli" : chainId == 80001 ? "mumbai" : "Error";
+    }
 
     return (
         <div className="results-form">
@@ -33,12 +39,12 @@ const ClaimView = ({bridgeAddress}: Props) => {
                     </tr>
                 </thead>
                 <tbody>
-                {claimData && claimData.map((data, index) => {
+                {claimData && claimData.filter(data => data.to == getNetworkName(chainId)).map((data, index) => {
                     return (
                     <tr key={index}>
                         <td>{data.from}</td>
                         <td>{data.to}</td>
-                        <td><ClaimTableRow tokenAddress={data.token} /></td>
+                        <td>{data.symbol ? "W" + data.symbol : "----"} | {shortenHex(data.token, 4)}</td>
                         <td>{ethers.utils.formatEther(data.amount)}</td>
                         <td><ClaimTableButton bridgeAddress={bridgeAddress} tokenAddress={data.token} account={account} data={data} /></td>
                     </tr>
@@ -56,4 +62,4 @@ const ClaimView = ({bridgeAddress}: Props) => {
     );
 };
 
-export default ClaimView;
+export default PolygonClaimView;

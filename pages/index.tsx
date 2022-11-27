@@ -2,9 +2,10 @@ import { useWeb3React } from "@web3-react/core";
 import Head from "next/head";
 import Link from "next/link";
 import Account from "../components/Account";
-import EthereumNetwork from "../components/EthereumNetwork";
+import EthereumNetwork from "../components/ethereum/EthereumNetwork";
 import Menu from "../components/Menu";
 import NativeCurrencyBalance from "../components/NativeCurrencyBalance";
+import PolygonNetwork from "../components/polygon/PolygonNetwork";
 import SwitchNetwork from "../components/SwitchNetwork";
 import TokenBalance from "../components/TokenBalance";
 import USLibrary from "../components/USLibrary";
@@ -43,7 +44,7 @@ function Home() {
             <Menu page="Transfer" />
             <SwitchNetwork />
             {chainId == 5 && (<EthereumNetwork bridgeContractAddress={ETHEREUM_BRIDGE_GOERLI} />)}
-            {chainId == 80001 && (<EthereumNetwork bridgeContractAddress={POLYGON_BRIDGE_MUMBAI} />)}
+            {chainId == 80001 && (<PolygonNetwork bridgeContractAddress={POLYGON_BRIDGE_MUMBAI} />)}
           </section>
         )}
       </main>
