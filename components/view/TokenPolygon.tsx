@@ -26,7 +26,6 @@ const TokenPolygon = ({ account, tokenAddress, bridgeAddress }: Contract) => {
             setTokenValid(code != "0x" ? true : false);
         }
         fetchIsTokenValid();
-        
     }, [])
     
 

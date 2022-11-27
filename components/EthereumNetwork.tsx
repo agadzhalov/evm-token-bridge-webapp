@@ -4,7 +4,9 @@ import { ethers } from "ethers";
 import { useCallback, useEffect, useState } from "react";
 import { ETHEREUM_TOKEN_BRIDGE } from "../constants";
 import useEthereumBridgeContract from "../hooks/useEthereumBridgeContract";
+import useGetWalletTokens from "../hooks/useGetWalletTokens";
 import useTokenBalance from "../hooks/useTokenBalance";
+import { shortenHex } from "../util";
 import Token from "./view/Token";
 import TokenPolygon from "./view/TokenPolygon";
 
@@ -17,9 +19,16 @@ type Contract = {
 const EthereumNetwork = ({ bridgeContractAddress }: Contract) => {
     const [tokenAddress, setTokenAddress] = useState<string | undefined>();
     const { account, library, chainId } = useWeb3React<Web3Provider>();
-
+    const { getTokens, isLoadingTokens } = useGetWalletTokens();
+    const [walletTokens, setWalletTokens] = useState<any | undefined>();
+    
     useEffect(() => {
-        setTokenAddress(tokenAddress); //"0x5FbDB2315678afecb367f032d93F642f64180aa3"
+        setTokenAddress(tokenAddress);
+        const retrieveTokens = async() => {
+            setWalletTokens(await getTokens());
+        }
+        retrieveTokens();
+
     }, [])
 
     const stateTokenAddress = (input) => {
@@ -32,8 +41,25 @@ const EthereumNetwork = ({ bridgeContractAddress }: Contract) => {
     
     return (
         <div className="results-form">
-            <label>Token Address</label>
+            <label>Token BY Address</label>
             <input onChange={stateTokenAddress} value={tokenAddress || ''} type="text" name="token_address" />
+            <br/>
+            <label>Tokens from wallet</label>
+            {isLoadingTokens && ("Loading tokens from wallet ....")}
+            {!isLoadingTokens && walletTokens && (
+                <select
+                    value={tokenAddress}
+                    onChange={(e) => setTokenAddress(e.target.value)}
+                >   
+                    <option value=""></option>
+                    {walletTokens.map((token, index) => {
+                        return (<option value={token.address} key={index}>
+                                    {token.name} | {token.symbol} | {token.balance} | {shortenHex(token.address, 4)}
+                                </option>)
+                    })}
+                </select>
+            )}
+            
             <br/><br/>
             {isValidAddress() && chainId == 5 && (<Token account={account} tokenAddress={tokenAddress || ''} bridgeAddress={bridgeContractAddress} />)}
             {isValidAddress() && chainId == 80001 && (<TokenPolygon account={account} tokenAddress={tokenAddress || ''} bridgeAddress={bridgeContractAddress} />)}
