@@ -87,6 +87,7 @@ const PolygonToken = ({ account, tokenAddress, bridgeAddress }: Contract) => {
                 </div>
             )}
             {isSendLoading && (<PendingTX txHash={txHashSend} />)}
+            {isApproveLoading && (<PendingTX txHash={approveTx} />)}
         </div>
     );
 };

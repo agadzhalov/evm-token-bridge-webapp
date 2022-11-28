@@ -28,7 +28,7 @@ const usePolygonBridge = (bridgeAddress: string) => {
             setTxHashClaim(tx.hash);
             await tx.wait();
             
-            claimLocalStorage(id, account, amount, amount);
+            claimLocalStorage(id);
             const getTargetTokenTx = await contract.getTargetTokenFromSource(tokenAddres);
         } catch (error) {
             console.log(error);
@@ -45,6 +45,7 @@ const usePolygonBridge = (bridgeAddress: string) => {
     const sendERC20 = async(account: string, tokenAddres: string, name: string, symbol: string, amount: string) => {
         try {
             const tx = await contract.destroyTokens(tokenAddres, amount);
+            setIsSendLoading(true);
             setTxHashSend(tx.hash);
             await tx.wait();
             upadteLocalStorage(tx.hash, account, tokenAddres, name, symbol, amount, getCurrentNetworkName(chainId), "goerli"); // from goerli to mumbai
@@ -80,7 +81,7 @@ const upadteLocalStorage = (txHash: string, account: string, tokenAddres: string
     localStorage.setItem("transferToken", JSON.stringify(store));
 }
 
-const claimLocalStorage = (id: string, account: string, tokenAddres: string, amount: string) => {
+const claimLocalStorage = (id: string) => {
     let store = JSON.parse(localStorage.getItem("transferToken"));
     store.map(record => {
         if (record.id == id) {
