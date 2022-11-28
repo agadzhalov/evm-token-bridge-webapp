@@ -46,19 +46,8 @@ const upadteLocalStorage = (txHash: string, account: string, tokenAddres: string
     localStorage.setItem("transferToken", JSON.stringify(store));
 }
 
-const claimLocalStorage = (id: string, account: string, tokenAddres: string, amount: string) => {
-    let store = JSON.parse(localStorage.getItem("transferToken"));
-    store.map(record => {
-        if (record.id == id) {
-            record.claimed = true;
-        }
-    });
-    localStorage.setItem("transferToken", JSON.stringify(store));
-    window.dispatchEvent(new Event("localStorageEvent"));
-}
-
-const getNetworkName = (chainId: any) => {
-    return chainId == 5 ? "Goerli" : chainId == 80001 ? "Mumbai" : "Error";
+const getCurrentNetworkName = (chainId: any) => {
+    return chainId == 5 ? "goerli" : chainId == 80001 ? "mumbai" : "Other/Unknown";
 }
 
 export default useEthereumBridge;

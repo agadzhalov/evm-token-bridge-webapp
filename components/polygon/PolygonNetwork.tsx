@@ -36,9 +36,6 @@ const PolygonNetwork = ({ bridgeContractAddress }: Contract) => {
     
     return (
         <div className="results-form">
-            <label>Token BY Address</label>
-            <input onChange={stateTokenAddress} value={tokenAddress || ''} type="text" name="token_address" />
-            <br/>
             <label>Tokens from wallet</label>
             {isLoadingTokens && ("Loading tokens from wallet ....")}
             {!isLoadingTokens && walletTokens && (
@@ -54,7 +51,9 @@ const PolygonNetwork = ({ bridgeContractAddress }: Contract) => {
                     })}
                 </select>
             )}
-            
+            <br/>
+            <label>Token BY Address</label>
+            <input onChange={stateTokenAddress} value={tokenAddress || ''} type="text" name="token_address" />
             <br/><br/>
             {isValidAddress() && chainId == 80001 && (<PolygonToken account={account} tokenAddress={tokenAddress || ''} bridgeAddress={bridgeContractAddress} />)}
             {!isValidAddress() && tokenAddress !== undefined && tokenAddress.length > 0 && ("Please enter valid address")}
