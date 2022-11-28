@@ -45,7 +45,7 @@ const PolygonToken = ({ account, tokenAddress, bridgeAddress }: Contract) => {
     }, [tokenName])
     
     const sendTokens = async() => {
-        await approveToken(wei(amount)).then();
+        await approveToken(wei(amount));
         await sendERC20(account, tokenAddress, tokenName, tokenSymbol, wei(amount));
     }
 
