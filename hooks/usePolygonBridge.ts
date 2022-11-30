@@ -29,7 +29,6 @@ const usePolygonBridge = (bridgeAddress: string) => {
             await tx.wait();
             
             claimLocalStorage(id);
-            const getTargetTokenTx = await contract.getTargetTokenFromSource(tokenAddres);
         } catch (error) {
             console.log(error);
             setClaimError(error);
@@ -44,11 +43,12 @@ const usePolygonBridge = (bridgeAddress: string) => {
 
     const sendERC20 = async(account: string, tokenAddres: string, name: string, symbol: string, amount: string, networkToBridge: number) => {
         try {
+            const sourceToken = await contract.getSourceTokenFromTarget(tokenAddres);
             const tx = await contract.destroyTokens(tokenAddres, amount);
             setIsSendLoading(true);
             setTxHashSend(tx.hash);
             await tx.wait();
-            upadteLocalStorage(tx.hash, account, tokenAddres, name, symbol, amount, getNetworkName(chainId), getNetworkName(networkToBridge)); // from goerli to mumbai
+            upadteLocalStorage(tx.hash, account, sourceToken, name, symbol, amount, getNetworkName(chainId), getNetworkName(networkToBridge)); // from goerli to mumbai
             setSendError(null);
         } catch (error) {
             setSendError(error);

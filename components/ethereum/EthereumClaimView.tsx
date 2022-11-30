@@ -13,7 +13,7 @@ type Props = {
 
 const EthereumClaimView = ({bridgeAddress}: Props) => {
     const { account, library, chainId } = useWeb3React();
-    const { claimEthereumTokens, isClaimLoading, txHashClaim, claimError } = useEthereumBridge(bridgeAddress);
+    const { unlockEthereumTokens, isClaimLoading, txHashClaim, claimError } = useEthereumBridge(bridgeAddress);
     const [claimData, setClaimData] = useState<any | undefined>();
     
     useEffect(() => {
@@ -49,7 +49,7 @@ const EthereumClaimView = ({bridgeAddress}: Props) => {
                                     <td>{data.symbol ? data.symbol : "----"} | {shortenHex(data.token, 4)}</td>
                                     <td>{ethers.utils.formatEther(data.amount)}</td>
                                     <td> <input type="button" value="Claim"
-                                        onClick={() => claimEthereumTokens(data.id, data.token, data.amount)} disabled={data.claimed} /></td>
+                                        onClick={() => unlockEthereumTokens(data.id, data.token, data.amount)} disabled={data.claimed} /></td>
                                 </tr>
                             )
                         })}

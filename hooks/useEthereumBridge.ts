@@ -31,7 +31,7 @@ const useEthereumBridge = (bridgeAddress: string) => {
     const [isClaimLoading, setIsClaimLoading] = useState<boolean | undefined>(false);
     const [claimError, setClaimError] = useState<any | undefined>();
 
-    const claimEthereumTokens = async(id: string, sourceToken: string, amount: string) => {
+    const unlockEthereumTokens = async(id: string, sourceToken: string, amount: string) => {
         try {
             const tx = await contract.unlock(sourceToken, amount);
             setIsClaimLoading(true);
@@ -48,7 +48,7 @@ const useEthereumBridge = (bridgeAddress: string) => {
     }
 
     return { depositERC20, txHash, isLoading, error,
-        claimEthereumTokens, txHashClaim, isClaimLoading, claimError };
+        unlockEthereumTokens, txHashClaim, isClaimLoading, claimError };
 }
 
 const upadteLocalStorage = (txHash: string, account: string, tokenAddres: string, name: string, symbol: string, amount: string, fromChain: string, toChainName: string) => {

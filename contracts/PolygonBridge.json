@@ -126,7 +126,7 @@
         "inputs": [
             {
                 "internalType": "address",
-                "name": "_sourceAddress",
+                "name": "_targetAddress",
                 "type": "address"
             },
             {
@@ -138,6 +138,25 @@
         "name": "destroyTokens",
         "outputs": [],
         "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "address",
+                "name": "_targetAddress",
+                "type": "address"
+            }
+        ],
+        "name": "getSourceTokenFromTarget",
+        "outputs": [
+            {
+                "internalType": "address",
+                "name": "",
+                "type": "address"
+            }
+        ],
+        "stateMutability": "view",
         "type": "function"
     },
     {
@@ -176,53 +195,6 @@
             }
         ],
         "stateMutability": "view",
-        "type": "function"
-    },
-    {
-        "inputs": [],
-        "name": "token",
-        "outputs": [
-            {
-                "internalType": "contract BaseToken",
-                "name": "",
-                "type": "address"
-            }
-        ],
-        "stateMutability": "view",
-        "type": "function"
-    },
-    {
-        "inputs": [
-            {
-                "internalType": "bytes32",
-                "name": "_hashedMessage",
-                "type": "bytes32"
-            },
-            {
-                "internalType": "uint8",
-                "name": "_v",
-                "type": "uint8"
-            },
-            {
-                "internalType": "bytes32",
-                "name": "_r",
-                "type": "bytes32"
-            },
-            {
-                "internalType": "bytes32",
-                "name": "_s",
-                "type": "bytes32"
-            }
-        ],
-        "name": "verifyMessage",
-        "outputs": [
-            {
-                "internalType": "address",
-                "name": "",
-                "type": "address"
-            }
-        ],
-        "stateMutability": "pure",
         "type": "function"
     }
 ]
