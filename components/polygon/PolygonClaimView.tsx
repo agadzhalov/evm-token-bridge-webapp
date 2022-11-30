@@ -55,12 +55,12 @@ const PolygonClaimView = ({bridgeAddress}: Props) => {
                                         onClick={() => claimPolygonTokens(data.id, account, data.token, data.amount, data.name, data.symbol)} disabled={data.claimed} /></td>
                                     <td>
                                         <a {...{href: formatEtherscanLink("Transaction", [5, data.transferTxHash]), target: "_blank"}}>
-                                            {data.transferTxHash}
+                                            {data.transferTxHash ? shortenHex(data.transferTxHash, 4) : ""}
                                         </a>
                                     </td>
                                     <td>
                                     <a {...{href: formatPolygonscanLink("Transaction", [80001, data.claimTxHash]), target: "_blank"}}>
-                                            {data.claimTxHash}
+                                            {data.claimTxHash ? shortenHex(data.claimTxHash, 4) : ""}
                                         </a>
                                     </td>
                                 </tr>
@@ -73,7 +73,7 @@ const PolygonClaimView = ({bridgeAddress}: Props) => {
             {claimError && (JSON.stringify(claimError))}
             <style jsx>{`
             .results-form {
-                width: 80%;
+                width: 50%;
                 margin: 0 auto;
             }
             table tr td, table tr th{
