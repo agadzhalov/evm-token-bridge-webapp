@@ -2,7 +2,7 @@ import { useWeb3React } from "@web3-react/core";
 import { ethers } from "ethers";
 import { useEffect, useState } from "react";
 import useEthereumBridge from "../../hooks/useEthereumBridge";
-import { shortenHex } from "../../util";
+import { formatEtherscanLink, formatPolygonscanLink, shortenHex } from "../../util";
 import ClaimTableRow from "../view/ClaimTableRow";
 import usePolygonBridge from "../../hooks/usePolygonBridge";
 import PendingTX from "../view/PendingTX";
@@ -39,6 +39,8 @@ const PolygonClaimView = ({bridgeAddress}: Props) => {
                             <th>token</th>
                             <th>amount</th>
                             <th>action</th>
+                            <th>transferTx</th>
+                            <th>claimTx</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -51,6 +53,24 @@ const PolygonClaimView = ({bridgeAddress}: Props) => {
                                     <td>{ethers.utils.formatEther(data.amount)}</td>
                                     <td> <input type="button" value="Claim"
                                         onClick={() => claimPolygonTokens(data.id, account, data.token, data.amount, data.name, data.symbol)} disabled={data.claimed} /></td>
+                                    <td>
+                                        <a
+                                        {...{
+                                            href: formatEtherscanLink("Transaction", [5, data.transferTxHash]),
+                                            target: "_blank",
+                                        }}>
+                                            {data.transferTxHash}
+                                        </a>
+                                    </td>
+                                    <td>
+                                    <a
+                                        {...{
+                                            href: formatPolygonscanLink("Transaction", [80001, data.claimTxHash]),
+                                            target: "_blank",
+                                        }}>
+                                            {data.claimTxHash}
+                                        </a>
+                                    </td>
                                 </tr>
                             )
                         })}
@@ -61,8 +81,15 @@ const PolygonClaimView = ({bridgeAddress}: Props) => {
             {claimError && (JSON.stringify(claimError))}
             <style jsx>{`
             .results-form {
-                width: 50%;
+                width: 80%;
                 margin: 0 auto;
+            }
+            table tr td, table tr th{
+                border: 1px solid #000;
+            }
+            a {
+                color: blue;
+                text-decoration: underline;
             }
         `}</style>
         </div>

@@ -28,7 +28,7 @@ const usePolygonBridge = (bridgeAddress: string) => {
             setTxHashClaim(tx.hash);
             await tx.wait();
             
-            claimLocalStorage(id);
+            claimLocalStorage(id, tx.hash);
         } catch (error) {
             console.log(error);
             setClaimError(error);
@@ -48,7 +48,8 @@ const usePolygonBridge = (bridgeAddress: string) => {
             setIsSendLoading(true);
             setTxHashSend(tx.hash);
             await tx.wait();
-            upadteLocalStorage(tx.hash, account, sourceToken, name, symbol, amount, getNetworkName(chainId), getNetworkName(networkToBridge)); // from goerli to mumbai
+            upadteLocalStorage(tx.hash, account, sourceToken, name, symbol, amount, 
+                               getNetworkName(chainId), getNetworkName(networkToBridge), tx.hash); // from goerli to mumbai
             setSendError(null);
         } catch (error) {
             setSendError(error);
@@ -61,7 +62,8 @@ const usePolygonBridge = (bridgeAddress: string) => {
     sendERC20, txHashSend, isSendLoading, sendError  };
 }
 
-const upadteLocalStorage = (txHash: string, account: string, tokenAddres: string, name: string, symbol: string, amount: string, fromChain: string, toChainName: string) => {
+const upadteLocalStorage = (txHash: string, account: string, tokenAddres: string, name: string, symbol: string, 
+    amount: string, fromChain: string, toChainName: string, transferTx: string) => {
     if (localStorage.getItem("transferToken") == null) {
         localStorage.setItem("transferToken", "[]");
     }
@@ -76,16 +78,19 @@ const upadteLocalStorage = (txHash: string, account: string, tokenAddres: string
         "symbol": symbol,
         "token": tokenAddres,
         "amount": amount,
-        "claimed": false
+        "claimed": false,
+        "transferTxHash": transferTx,
+        "claimTxHash": null
     });
     localStorage.setItem("transferToken", JSON.stringify(store));
 }
 
-const claimLocalStorage = (id: string) => {
+const claimLocalStorage = (id: string, claimTxHash: string) => {
     let store = JSON.parse(localStorage.getItem("transferToken"));
     store.map(record => {
         if (record.id == id) {
             record.claimed = true;
+            record.claimTxHash = claimTxHash;
         }
     });
     localStorage.setItem("transferToken", JSON.stringify(store));

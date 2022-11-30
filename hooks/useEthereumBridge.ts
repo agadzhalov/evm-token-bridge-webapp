@@ -18,7 +18,8 @@ const useEthereumBridge = (bridgeAddress: string) => {
             setIsLoading(true);
             setTxHash(tx.hash);
             await tx.wait();
-            upadteLocalStorage(tx.hash, account, tokenAddres, name, symbol, amount, getNetworkName(chainId), getNetworkName(networkToBridgeId)); // from goerli to mumbai
+            upadteLocalStorage(tx.hash, account, tokenAddres, name, symbol, amount, 
+                getNetworkName(chainId), getNetworkName(networkToBridgeId), tx.hash); // from goerli to mumbai
             setError(null);
         } catch (error) {
             setError(error);
@@ -51,7 +52,8 @@ const useEthereumBridge = (bridgeAddress: string) => {
         unlockEthereumTokens, txHashClaim, isClaimLoading, claimError };
 }
 
-const upadteLocalStorage = (txHash: string, account: string, tokenAddres: string, name: string, symbol: string, amount: string, fromChain: string, toChainName: string) => {
+const upadteLocalStorage = (txHash: string, account: string, tokenAddres: string, name: string, symbol: string, 
+    amount: string, fromChain: string, toChainName: string, transferFromSourceTxHash: string) => {
     if (localStorage.getItem("transferToken") == null) {
         localStorage.setItem("transferToken", "[]");
     }
@@ -63,10 +65,12 @@ const upadteLocalStorage = (txHash: string, account: string, tokenAddres: string
         "to": toChainName,
         "account": account,
         "name": name,
-        "symbol": symbol,
+        "symbol": symbol.substring(1),
         "token": tokenAddres,
         "amount": amount,
-        "claimed": false
+        "claimed": false,
+        "transferTxHash": transferFromSourceTxHash,
+        "claimTxHash": null
     });
     localStorage.setItem("transferToken", JSON.stringify(store));
 }
