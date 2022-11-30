@@ -54,20 +54,12 @@ const PolygonClaimView = ({bridgeAddress}: Props) => {
                                     <td> <input type="button" value="Claim"
                                         onClick={() => claimPolygonTokens(data.id, account, data.token, data.amount, data.name, data.symbol)} disabled={data.claimed} /></td>
                                     <td>
-                                        <a
-                                        {...{
-                                            href: formatEtherscanLink("Transaction", [5, data.transferTxHash]),
-                                            target: "_blank",
-                                        }}>
+                                        <a {...{href: formatEtherscanLink("Transaction", [5, data.transferTxHash]), target: "_blank"}}>
                                             {data.transferTxHash}
                                         </a>
                                     </td>
                                     <td>
-                                    <a
-                                        {...{
-                                            href: formatPolygonscanLink("Transaction", [80001, data.claimTxHash]),
-                                            target: "_blank",
-                                        }}>
+                                    <a {...{href: formatPolygonscanLink("Transaction", [80001, data.claimTxHash]), target: "_blank"}}>
                                             {data.claimTxHash}
                                         </a>
                                     </td>

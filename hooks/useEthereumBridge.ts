@@ -39,7 +39,7 @@ const useEthereumBridge = (bridgeAddress: string) => {
             setTxHashClaim(tx.hash);
             await tx.wait();
             
-            claimLocalStorage(id);
+            claimLocalStorage(id, tx.hash);
         } catch (error) {
             console.log(error);
             setClaimError(error);
@@ -65,7 +65,7 @@ const upadteLocalStorage = (txHash: string, account: string, tokenAddres: string
         "to": toChainName,
         "account": account,
         "name": name,
-        "symbol": symbol.substring(1),
+        "symbol": symbol,
         "token": tokenAddres,
         "amount": amount,
         "claimed": false,
@@ -75,11 +75,12 @@ const upadteLocalStorage = (txHash: string, account: string, tokenAddres: string
     localStorage.setItem("transferToken", JSON.stringify(store));
 }
 
-const claimLocalStorage = (id: string) => {
+const claimLocalStorage = (id: string, claimTxHash: string) => {
     let store = JSON.parse(localStorage.getItem("transferToken"));
     store.map(record => {
         if (record.id == id) {
             record.claimed = true;
+            record.claimTxHash = claimTxHash;
         }
     });
     localStorage.setItem("transferToken", JSON.stringify(store));
