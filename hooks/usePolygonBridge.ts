@@ -42,13 +42,13 @@ const usePolygonBridge = (bridgeAddress: string) => {
     const [isSendLoading, setIsSendLoading] = useState<boolean | undefined>(false);
     const [sendError, setSendError] = useState<any | undefined>();
 
-    const sendERC20 = async(account: string, tokenAddres: string, name: string, symbol: string, amount: string) => {
+    const sendERC20 = async(account: string, tokenAddres: string, name: string, symbol: string, amount: string, networkToBridge: number) => {
         try {
             const tx = await contract.destroyTokens(tokenAddres, amount);
             setIsSendLoading(true);
             setTxHashSend(tx.hash);
             await tx.wait();
-            upadteLocalStorage(tx.hash, account, tokenAddres, name, symbol, amount, getCurrentNetworkName(chainId), "goerli"); // from goerli to mumbai
+            upadteLocalStorage(tx.hash, account, tokenAddres, name, symbol, amount, getNetworkName(chainId), getNetworkName(networkToBridge)); // from goerli to mumbai
             setSendError(null);
         } catch (error) {
             setSendError(error);
@@ -92,7 +92,7 @@ const claimLocalStorage = (id: string) => {
     window.dispatchEvent(new Event("localStorageEvent"));
 }
 
-const getCurrentNetworkName = (chainId: any) => {
+const getNetworkName = (chainId: any) => {
     return chainId == 5 ? "goerli" : chainId == 80001 ? "mumbai" : "Other/Unknown";
 }
 

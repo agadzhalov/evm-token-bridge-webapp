@@ -16,8 +16,14 @@ const EthereumNetwork = ({ bridgeContractAddress }: Contract) => {
     const { account, library, chainId } = useWeb3React<Web3Provider>();
     const { getTokens, isLoadingTokens } = useGetWalletTokens();
     const [walletTokens, setWalletTokens] = useState<any | undefined>();
+    const [networkToBridge, setNetworkToBridge] = useState<any | undefined>();
+    const networks = [
+        {id: 5, name: "goerli"},
+        {id: 80001, name: "mumbai"}
+    ]
     
     useEffect(() => {
+        setNetworkToBridge(80001); // default network when the page laods
         setTokenAddress(tokenAddress);
         const retrieveTokens = async() => {
             setWalletTokens(await getTokens());
@@ -36,27 +42,46 @@ const EthereumNetwork = ({ bridgeContractAddress }: Contract) => {
     
     return (
         <div className="results-form">
-            <label>Tokens from wallet</label>
-            {isLoadingTokens && ("Loading tokens from wallet ....")}
-            {!isLoadingTokens && walletTokens && (
+            <div className="network-to-bridge">
+                <label>Choose network to bridge to</label>
                 <select
-                    value={tokenAddress}
-                    onChange={(e) => setTokenAddress(e.target.value)}
-                >   
-                    <option value=""></option>
-                    {walletTokens.map((token, index) => {
-                        return (<option value={token.address} key={index}>
-                                    {token.name} | {token.symbol} | {token.balance} | {shortenHex(token.address, 4)}
-                                </option>)
+                    value={networkToBridge}
+                    onChange={(e) => setNetworkToBridge(e.target.value)}
+                >
+                    {networks.map((network, index) => {
+                        return (<option value={network.id} key={index} disabled={ chainId === network.id }>
+                            {network.name} 
+                        </option>)
                     })}
                 </select>
-            )}
-            <br/>
-            <label>Token BY Address</label>
-            <input onChange={stateTokenAddress} value={tokenAddress || ''} type="text" name="token_address" />
-            <br/><br/>
-            {isValidAddress() && chainId == 5 && (<EthereumToken account={account} tokenAddress={tokenAddress || ''} bridgeAddress={bridgeContractAddress} />)}
-            {!isValidAddress() && tokenAddress !== undefined && tokenAddress.length > 0 && ("Please enter valid address")}
+            </div>
+            <div className="choose-tokens">
+                <label>Choose Token</label>
+                {isLoadingTokens && ("Loading tokens from wallet ....")}
+                {!isLoadingTokens && walletTokens && (
+                    <select
+                        value={tokenAddress}
+                        onChange={(e) => setTokenAddress(e.target.value)}
+                    >   
+                        <option value=""></option>
+                        {walletTokens.map((token, index) => {
+                            return (<option value={token.address} key={index}>
+                                        {token.name} | {token.symbol} | {token.balance} | {shortenHex(token.address, 4)}
+                                    </option>)
+                        })}
+                    </select>
+                )}
+                <br/>
+                <label>Choose Address</label>
+                <input onChange={stateTokenAddress} value={tokenAddress || ''} type="text" name="token_address" />
+            </div>
+            
+            <div className="choose-amount">
+                {isValidAddress() && chainId == 5 && (
+                <EthereumToken account={account} tokenAddress={tokenAddress || ''} bridgeAddress={bridgeContractAddress} networkToBridgeId={networkToBridge} />)}
+                {!isValidAddress() && tokenAddress !== undefined && tokenAddress.length > 0 && ("Please enter valid address")}
+            </div>
+            
             <style jsx>{`
             .results-form {
                 width: 50%;

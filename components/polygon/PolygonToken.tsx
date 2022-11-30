@@ -14,9 +14,10 @@ type Contract = {
     account: any;
     tokenAddress: string;
     bridgeAddress: string;
+    networkToBridgeId: number;
 };
 
-const PolygonToken = ({ account, tokenAddress, bridgeAddress }: Contract) => {
+const PolygonToken = ({ account, tokenAddress, bridgeAddress, networkToBridgeId }: Contract) => {
     const contract = useTokenContract(tokenAddress);
     const { data } = useTokenBalance(account, tokenAddress);
     const { sendERC20, isSendLoading, txHashSend, sendError } = usePolygonBridge(bridgeAddress);
@@ -46,7 +47,7 @@ const PolygonToken = ({ account, tokenAddress, bridgeAddress }: Contract) => {
     
     const sendTokens = async() => {
         await approveToken(wei(amount));
-        await sendERC20(account, tokenAddress, tokenName, tokenSymbol, wei(amount));
+        await sendERC20(account, tokenAddress, tokenName, tokenSymbol, wei(amount), networkToBridgeId);
     }
 
     const stateAmountToken = (input) => {

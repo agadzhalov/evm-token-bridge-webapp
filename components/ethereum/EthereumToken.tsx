@@ -13,9 +13,10 @@ type Contract = {
     account: any;
     tokenAddress: string;
     bridgeAddress: string;
+    networkToBridgeId: number;
 };
 
-const EthereumToken = ({ account, tokenAddress, bridgeAddress }: Contract) => {
+const EthereumToken = ({ account, tokenAddress, bridgeAddress, networkToBridgeId }: Contract) => {
     const contract = useTokenContract(tokenAddress);
     const { data } = useTokenBalance(account, tokenAddress);
 
@@ -67,9 +68,10 @@ const EthereumToken = ({ account, tokenAddress, bridgeAddress }: Contract) => {
     }
 
     const transfer = async() => {
+        console.log(networkToBridgeId)
         const name = await contract.name();
         const symbol = await contract.symbol();
-        depositERC20(account, tokenAddress, name, symbol, wei(amount));
+        depositERC20(networkToBridgeId, account, tokenAddress, name, symbol, wei(amount));
         setAmount("");
     }
 
@@ -99,9 +101,9 @@ const EthereumToken = ({ account, tokenAddress, bridgeAddress }: Contract) => {
                         <input type="button" value="Transfer" onClick={() => transfer()} disabled={transferDisable} /><br/>
                     </div>
                     )}
-                    {isApproveLoading && (<PendingTX txHash={approveTx} />)}
                 </div>
             )}
+            {isApproveLoading && (<PendingTX txHash={approveTx} />)}
             {depositIsLoaidng && (<PendingTX txHash={depositTxHash} />)}
             
         </div>

@@ -1,20 +1,24 @@
+import { Web3Provider } from "@ethersproject/providers";
+import { useWeb3React } from "@web3-react/core";
 import { useState } from "react";
 import { BaseToken } from "../contracts/types";
 import useEthereumBridgeContract from "./useEthereumBridgeContract";
 
 const useEthereumBridge = (bridgeAddress: string) => {
     const contract = useEthereumBridgeContract(bridgeAddress);
+    const { library, chainId } = useWeb3React<Web3Provider>();
+
     const [txHash, setTxHash] = useState<string | undefined>();
     const [isLoading, setIsLoading] = useState<boolean | undefined>(false);
     const [error, setError] = useState<any | undefined>();
     
-    const depositERC20 = async(account: string, tokenAddres: string, name: string, symbol: string, amount: string) => {
+    const depositERC20 = async(networkToBridgeId: number, account: string, tokenAddres: string, name: string, symbol: string, amount: string) => {
         try {
             const tx = await contract.lock(tokenAddres, amount);
             setIsLoading(true);
             setTxHash(tx.hash);
             await tx.wait();
-            upadteLocalStorage(tx.hash, account, tokenAddres, name, symbol, amount, "goerli", "mumbai"); // from goerli to mumbai
+            upadteLocalStorage(tx.hash, account, tokenAddres, name, symbol, amount, getNetworkName(chainId), getNetworkName(networkToBridgeId)); // from goerli to mumbai
             setError(null);
         } catch (error) {
             setError(error);
@@ -46,7 +50,7 @@ const upadteLocalStorage = (txHash: string, account: string, tokenAddres: string
     localStorage.setItem("transferToken", JSON.stringify(store));
 }
 
-const getCurrentNetworkName = (chainId: any) => {
+const getNetworkName = (chainId: any) => {
     return chainId == 5 ? "goerli" : chainId == 80001 ? "mumbai" : "Other/Unknown";
 }
 
