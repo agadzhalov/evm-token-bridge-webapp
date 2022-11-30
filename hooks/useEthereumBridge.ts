@@ -27,7 +27,28 @@ const useEthereumBridge = (bridgeAddress: string) => {
         }
     }
 
-    return { depositERC20, txHash, isLoading, error };
+    const [txHashClaim, setTxHashClaim] = useState<string | undefined>();
+    const [isClaimLoading, setIsClaimLoading] = useState<boolean | undefined>(false);
+    const [claimError, setClaimError] = useState<any | undefined>();
+
+    const claimEthereumTokens = async(id: string, sourceToken: string, amount: string) => {
+        try {
+            const tx = await contract.unlock(sourceToken, amount);
+            setIsClaimLoading(true);
+            setTxHashClaim(tx.hash);
+            await tx.wait();
+            
+            claimLocalStorage(id);
+        } catch (error) {
+            console.log(error);
+            setClaimError(error);
+        } finally {
+            setIsClaimLoading(false);
+        }
+    }
+
+    return { depositERC20, txHash, isLoading, error,
+        claimEthereumTokens, txHashClaim, isClaimLoading, claimError };
 }
 
 const upadteLocalStorage = (txHash: string, account: string, tokenAddres: string, name: string, symbol: string, amount: string, fromChain: string, toChainName: string) => {
@@ -48,6 +69,17 @@ const upadteLocalStorage = (txHash: string, account: string, tokenAddres: string
         "claimed": false
     });
     localStorage.setItem("transferToken", JSON.stringify(store));
+}
+
+const claimLocalStorage = (id: string) => {
+    let store = JSON.parse(localStorage.getItem("transferToken"));
+    store.map(record => {
+        if (record.id == id) {
+            record.claimed = true;
+        }
+    });
+    localStorage.setItem("transferToken", JSON.stringify(store));
+    window.dispatchEvent(new Event("localStorageEvent"));
 }
 
 const getNetworkName = (chainId: any) => {

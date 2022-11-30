@@ -13,7 +13,7 @@ type Props = {
 
 const EthereumClaimView = ({bridgeAddress}: Props) => {
     const { account, library, chainId } = useWeb3React();
-    const { depositERC20, txHash: depositTxHash, isLoading: depositIsLoaidng, error: depositError } = useEthereumBridge(bridgeAddress);
+    const { claimEthereumTokens, isClaimLoading, txHashClaim, claimError } = useEthereumBridge(bridgeAddress);
     const [claimData, setClaimData] = useState<any | undefined>();
     
     useEffect(() => {
@@ -29,7 +29,35 @@ const EthereumClaimView = ({bridgeAddress}: Props) => {
 
     return (
         <div className="results-form">
-            ethereum claim
+            {!isClaimLoading && (
+                <table>
+                    <thead>
+                        <tr>
+                            <th>from</th>
+                            <th>to</th>
+                            <th>token</th>
+                            <th>amount</th>
+                            <th>action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {claimData && claimData.filter(data => data.account == account && data.to == getNetworkName(chainId)).map((data, index) => {
+                            return (
+                                <tr key={index}>
+                                    <td>{data.from}</td>
+                                    <td>{data.to}</td>
+                                    <td>{data.symbol ? data.symbol : "----"} | {shortenHex(data.token, 4)}</td>
+                                    <td>{ethers.utils.formatEther(data.amount)}</td>
+                                    <td> <input type="button" value="Claim"
+                                        onClick={() => claimEthereumTokens(data.id, data.token, data.amount)} disabled={data.claimed} /></td>
+                                </tr>
+                            )
+                        })}
+                    </tbody>
+                </table>
+            )}
+            {isClaimLoading && (<PendingTX txHash={txHashClaim} />)}
+            {claimError && (JSON.stringify(claimError))}
             <style jsx>{`
             .results-form {
                 width: 50%;
