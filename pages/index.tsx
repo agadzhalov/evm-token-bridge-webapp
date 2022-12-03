@@ -34,7 +34,10 @@ function Home() {
 
             <header>
                 <nav>
-                    {isConnected && (<Account triedToEagerConnect={triedToEagerConnect} />)}
+                <Link href="/">
+                    <a>EVM Token Bridge</a>
+                </Link>
+                {isConnected && (<Account triedToEagerConnect={triedToEagerConnect} />)}
                 </nav>
             </header>
 

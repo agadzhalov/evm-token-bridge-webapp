@@ -6,6 +6,7 @@ import useENSName from "../hooks/useENSName";
 import useMetaMaskOnboarding from "../hooks/useMetaMaskOnboarding";
 import { formatEtherscanLink, shortenHex } from "../util";
 import { Button } from 'primereact/button';
+import NativeCurrencyBalance from "./NativeCurrencyBalance";
 
 type AccountProps = {
   triedToEagerConnect: boolean;
@@ -104,6 +105,7 @@ const Account = ({ triedToEagerConnect }: AccountProps) => {
     >
       {ENSName || `${shortenHex(account, 4)}`}
     </a>
+    <NativeCurrencyBalance />
     <Button 
       label="Disconnect" 
       className="p-button-raised p-button-danger"

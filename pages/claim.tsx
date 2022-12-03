@@ -8,6 +8,7 @@ import SwitchNetwork from "../components/SwitchNetwork";
 import { ETHEREUM_BRIDGE_GOERLI, POLYGON_BRIDGE_MUMBAI } from "../constants";
 import useEagerConnect from "../hooks/useEagerConnect";
 import ClaimContainer from "../components/claim/ClaimContainer";
+import Header from "../components/Header";
 
 function Claim() {
   const { account, library, chainId } = useWeb3React();
@@ -22,15 +23,7 @@ function Claim() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <header>
-        <nav>
-          <Link href="/">
-            <a>EVM Token Bridge</a>
-          </Link>
-
-          <Account triedToEagerConnect={triedToEagerConnect} />
-        </nav>
-      </header>
+      <Header />
 
       <main>
               

@@ -8,6 +8,7 @@ import SwitchNetwork from "../components/SwitchNetwork";
 import { ETHEREUM_BRIDGE_GOERLI, POLYGON_BRIDGE_MUMBAI } from "../constants";
 import useEagerConnect from "../hooks/useEagerConnect";
 import TransactionsHistory from "../components/txHistory/TransactionsHistory";
+import Header from "../components/Header";
 
 function History() {
   const { account, library, chainId } = useWeb3React();
@@ -22,15 +23,7 @@ function History() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <header>
-        <nav>
-          <Link href="/">
-            <a>LimeAcademy-boilerplate</a>
-          </Link>
-
-          <Account triedToEagerConnect={triedToEagerConnect} />
-        </nav>
-      </header>
+      <Header />
 
       <main>
               

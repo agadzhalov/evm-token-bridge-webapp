@@ -7,7 +7,7 @@ const NativeCurrencyBalance = () => {
   const { account } = useWeb3React<Web3Provider>();
   const { data } = useNativeCurrencyBalance(account);
 
-  return <p>Balance: Ξ{parseBalance(data ?? 0)}</p>;
+  return <span>Balance: Ξ{parseBalance(data ?? 0)}</span>;
 };
 
 export default NativeCurrencyBalance;
