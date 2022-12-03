@@ -12,6 +12,9 @@ import ERC20_ABI from "../../contracts/ERC20.json";
 import TransferButton from "./TransferButton";
 import useTokenDetails from "../../hooks/useTokenDetails";
 import ChooseAmount from "./ChooseAmount";
+import useEthereumBridge from "../../hooks/useEthereumBridge";
+import { ETHEREUM_BRIDGE_GOERLI } from "../../constants";
+import PendingTX from "../view/PendingTX";
 
 const TransferContainer = () => {
     const { account, library, chainId } = useWeb3React<Web3Provider>();
@@ -22,6 +25,7 @@ const TransferContainer = () => {
     const [amount, setAmount] = useState<string | undefined>();
 
     const {name, symbol, balance} = useTokenDetails(tokenAddress, ERC20_ABI);
+    const { depositERC20, txHash: depositTxHash, isLoading: depositIsLoaidng, error: depositError } = useEthereumBridge(ETHEREUM_BRIDGE_GOERLI);
 
     useEffect(() => {
         fetchIsTokenValid(tokenAddress);
@@ -29,10 +33,23 @@ const TransferContainer = () => {
 
     return (
         <div className="results-form">
-            <ChooseNetwork networkToBridge={networkToBridge} handleChooseNetwork={(networkToBridge) => setNetworkToBridge(networkToBridge) } />
-            <ChooseToken tokenAddress={tokenAddress} setTokenAddress={setTokenAddress} isTokenValid={isTokenValid} setIsTokenValid={setIsTokenValid} />
-            <ChooseAmount amount={amount} setAmount={setAmount} />
-            <TransferButton name={name || undefined} symbol={symbol || undefined} />
+            {depositIsLoaidng && (<PendingTX txHash={depositTxHash} />)}
+            {!depositIsLoaidng && (
+                <>
+                <ChooseNetwork networkToBridge={networkToBridge} handleChooseNetwork={(networkToBridge) => setNetworkToBridge(networkToBridge) } />
+                <ChooseToken tokenAddress={tokenAddress} setTokenAddress={setTokenAddress} isTokenValid={isTokenValid} setIsTokenValid={setIsTokenValid} />
+                <ChooseAmount amount={amount} setAmount={setAmount} />
+                <TransferButton 
+                    name={name || undefined} 
+                    symbol={symbol || undefined} 
+                    amount={amount} 
+                    setAmount={setAmount}
+                    networkToBridgeId={networkToBridge}
+                    tokenAddress={tokenAddress}
+                    depositERC20={depositERC20} />
+                </>
+            )}
+            
         </div>
     );
 };

@@ -24,7 +24,6 @@ const ChooseToken = ({ tokenAddress, setTokenAddress, isTokenValid, setIsTokenVa
             setWalletTokens(await getTokens());
         }
         retrieveTokens();
-
     }, [])
 
     const handleChangeTokenAddress = (input) => {
