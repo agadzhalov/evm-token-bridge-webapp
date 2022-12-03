@@ -10,6 +10,7 @@ import SwitchNetwork from "../components/SwitchNetwork";
 import { ETHEREUM_BRIDGE_GOERLI, POLYGON_BRIDGE_MUMBAI } from "../constants";
 import useEagerConnect from "../hooks/useEagerConnect";
 import EthereumClaimView from "../components/ethereum/EthereumClaimView";
+import ClaimContainer from "../components/claim/ClaimContainer";
 
 function Claim() {
   const { account, library, chainId } = useWeb3React();
@@ -41,8 +42,9 @@ function Claim() {
             <NativeCurrencyBalance />
             <Menu page="Claim" />
             <SwitchNetwork />
-            {chainId == 5 && (<EthereumClaimView bridgeAddress={ETHEREUM_BRIDGE_GOERLI} />)}
-            {chainId == 80001 && (<PolygonClaimView bridgeAddress={POLYGON_BRIDGE_MUMBAI} />)}
+            <ClaimContainer />
+            {/* {chainId == 5 && (<EthereumClaimView bridgeAddress={ETHEREUM_BRIDGE_GOERLI} />)}
+            {chainId == 80001 && (<PolygonClaimView bridgeAddress={POLYGON_BRIDGE_MUMBAI} />)} */}
             
           </section>
         )}

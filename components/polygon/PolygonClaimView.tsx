@@ -52,7 +52,7 @@ const PolygonClaimView = ({bridgeAddress}: Props) => {
                                     <td>{data.symbol ? "W" + data.symbol : "----"} | {shortenHex(data.token, 4)}</td>
                                     <td>{ethers.utils.formatEther(data.amount)}</td>
                                     <td> <input type="button" value="Claim"
-                                        onClick={() => claimPolygonTokens(data.id, account, data.token, data.amount, data.name, data.symbol)} disabled={data.claimed} /></td>
+                                        onClick={() => claimPolygonTokens(data.id, data.token, data.amount, data.name, data.symbol)} disabled={data.claimed} /></td>
                                     <td>
                                         <a {...{href: formatEtherscanLink("Transaction", [5, data.transferTxHash]), target: "_blank"}}>
                                             {data.transferTxHash ? shortenHex(data.transferTxHash, 4) : ""}
