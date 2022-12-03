@@ -65,7 +65,13 @@ const Account = ({ triedToEagerConnect }: AccountProps) => {
           />
           
         ) : (
-          <button onClick={startOnboarding}>Install Metamask</button>
+          <Button
+            label="Install Metamask"
+            type="button" 
+            className="mr-3 p-button-raised p-button-warning"
+            disabled={connecting}
+            onClick={startOnboarding}
+          />
         )}
         {(<Button 
             label="Wallet Connect" 
