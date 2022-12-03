@@ -1,12 +1,16 @@
 import { Web3Provider } from "@ethersproject/providers";
 import { useWeb3React } from "@web3-react/core";
+import { Contract, ethers } from "ethers";
 import { useState } from "react";
 import { BaseToken } from "../contracts/types";
 import useEthereumBridgeContract from "./useEthereumBridgeContract";
+import usePermitSignature from "./usePermitSignature";
+import BASE_TOKEN_ABI from "../contracts/BaseToken.json";
 
 const useEthereumBridge = (bridgeAddress: string) => {
     const contract = useEthereumBridgeContract(bridgeAddress);
     const { library, chainId } = useWeb3React<Web3Provider>();
+    const { getPermitSignature } = usePermitSignature();
 
     const [txHash, setTxHash] = useState<string | undefined>();
     const [isLoading, setIsLoading] = useState<boolean | undefined>(false);
@@ -14,14 +18,20 @@ const useEthereumBridge = (bridgeAddress: string) => {
     
     const depositERC20 = async(networkToBridgeId: number, account: string, tokenAddres: string, name: string, symbol: string, amount: string) => {
         try {
-            const tx = await contract.lock(tokenAddres, amount);
+            const owner = await library.getSigner();
+            const deadline = ethers.constants.MaxUint256;
+            const token =  new Contract(tokenAddres, BASE_TOKEN_ABI, library.getSigner(account));
+            const {v, r, s} = await getPermitSignature(owner, token, bridgeAddress, amount, deadline);
+            const tx = await contract.lock(tokenAddres, amount, deadline, v, r, s);
+            
             setIsLoading(true);
             setTxHash(tx.hash);
             await tx.wait();
             upadteLocalStorage(tx.hash, account, tokenAddres, name, symbol, amount, 
-                getNetworkName(chainId), getNetworkName(networkToBridgeId), tx.hash); // from goerli to mumbai
+            getNetworkName(chainId), getNetworkName(networkToBridgeId), tx.hash); // from goerli to mumbai
             setError(null);
         } catch (error) {
+            console.log(error)
             setError(error);
         } finally {
             setIsLoading(false);

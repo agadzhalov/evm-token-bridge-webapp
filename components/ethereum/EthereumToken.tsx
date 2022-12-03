@@ -3,7 +3,6 @@ import { useWeb3React } from "@web3-react/core";
 import { BigNumber, ethers } from "ethers";
 import { useCallback, useEffect, useState } from "react";
 import { EthereumBridge } from "../../contracts/types";
-import useApproveToken from "../../hooks/useApproveToken";
 import useEthereumBridge from "../../hooks/useEthereumBridge";
 import useTokenBalance from "../../hooks/useTokenBalance";
 import useTokenContract from "../../hooks/useTokenContract";
@@ -22,35 +21,21 @@ const EthereumToken = ({ account, tokenAddress, bridgeAddress, networkToBridgeId
 
     const [amount, setAmount] = useState<string | undefined>();
     const [transferDisable, setTransferDisable] = useState<boolean | undefined>(false);
-    const { approveToken, getAllowance, isLoading: isApproveLoading, txHash: approveTx } = useApproveToken(contract, bridgeAddress, account);
     const { depositERC20, txHash: depositTxHash, isLoading: depositIsLoaidng, error: depositError } = useEthereumBridge(bridgeAddress);
     const [tokenName, setTokenName] = useState<string | undefined>();
     const isValid = data !== undefined;
     
     useEffect(() => {
-        checkTransferDisable();
-
         const fetchTokenName = async() => {
             setTokenName(await contract.name());
         }
         fetchTokenName();
 
         contract.on('Approval', (account, bridgeAddress, formatAmount) => {
-            checkTransferDisable();
+            
         });
     }, [isValid, tokenName])
     
-    const checkTransferDisable = async() => {
-        if (isValid) {
-            const tokenAllowance = await getAllowance();
-            if (ethers.BigNumber.from(tokenAllowance).abs().gt(0)) {
-                setTransferDisable(false);
-            } else {
-                setTransferDisable(true);
-            }
-        }
-        
-    }
 
     const stateAmountToken = (input) => {
         const amount = input.target.value;
@@ -95,15 +80,11 @@ const EthereumToken = ({ account, tokenAddress, bridgeAddress, networkToBridgeId
                             </tbody>
                         </table>
                     </form>
-                    {!isApproveLoading && (
                     <div className="buttons">
-                        <input type="button" value="Approve" onClick={() => approveToken(wei(amount))} />
                         <input type="button" value="Transfer" onClick={() => transfer()} disabled={transferDisable} /><br/>
                     </div>
-                    )}
                 </div>
             )}
-            {isApproveLoading && (<PendingTX txHash={approveTx} />)}
             {depositIsLoaidng && (<PendingTX txHash={depositTxHash} />)}
             
         </div>
