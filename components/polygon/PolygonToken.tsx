@@ -3,7 +3,6 @@ import { useWeb3React } from "@web3-react/core";
 import { BigNumber, ethers } from "ethers";
 import { useCallback, useEffect, useState } from "react";
 import { EthereumBridge } from "../../contracts/types";
-import useApproveToken from "../../hooks/useApproveToken";
 import useEthereumBridge from "../../hooks/useEthereumBridge";
 import usePolygonBridge from "../../hooks/usePolygonBridge";
 import useTokenBalance from "../../hooks/useTokenBalance";
@@ -21,7 +20,6 @@ const PolygonToken = ({ account, tokenAddress, bridgeAddress, networkToBridgeId 
     const contract = useTokenContract(tokenAddress);
     const { data } = useTokenBalance(account, tokenAddress);
     const { sendERC20, isSendLoading, txHashSend, sendError } = usePolygonBridge(bridgeAddress);
-    const { approveToken, getAllowance, isLoading: isApproveLoading, txHash: approveTx } = useApproveToken(contract, bridgeAddress, account);
 
     const { library, chainId } = useWeb3React<Web3Provider>();
 
@@ -46,7 +44,6 @@ const PolygonToken = ({ account, tokenAddress, bridgeAddress, networkToBridgeId 
     }, [tokenName])
     
     const sendTokens = async() => {
-        await approveToken(wei(amount));
         await sendERC20(account, tokenAddress, tokenName, tokenSymbol, wei(amount), networkToBridgeId);
     }
 
@@ -88,7 +85,6 @@ const PolygonToken = ({ account, tokenAddress, bridgeAddress, networkToBridgeId 
                 </div>
             )}
             {isSendLoading && (<PendingTX txHash={txHashSend} />)}
-            {isApproveLoading && (<PendingTX txHash={approveTx} />)}
         </div>
     );
 };

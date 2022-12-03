@@ -1,14 +1,17 @@
 import { Web3Provider } from "@ethersproject/providers";
 import { useWeb3React } from "@web3-react/core";
-import { ethers } from "ethers";
+import { Contract, ethers } from "ethers";
 import { useState } from "react";
 import { BaseToken } from "../contracts/types";
 import useApproveToken from "./useApproveToken";
 import useEthereumBridgeContract from "./useEthereumBridgeContract";
 import usePolygonBridgeContract from "./usePolygonBridgeContract";
+import BASE_TOKEN_ABI from "../contracts/BaseToken.json";
+import usePermitSignature from "./usePermitSignature";
 
 const usePolygonBridge = (bridgeAddress: string) => {
     const { library, chainId } = useWeb3React<Web3Provider>();
+    const { getPermitSignature } = usePermitSignature();
     const contract = usePolygonBridgeContract(bridgeAddress);
 
     const [txHashClaim, setTxHashClaim] = useState<string | undefined>();
@@ -16,8 +19,8 @@ const usePolygonBridge = (bridgeAddress: string) => {
     const [claimError, setClaimError] = useState<any | undefined>();
 
     const claimPolygonTokens = async(id: string, account: string, tokenAddres: string, amount: string, tokenName: string, tokenSymobl: string) => {
-        const owner = await library.getSigner();
         try {
+            const owner = await library.getSigner();
             const messageHash = ethers.utils.solidityKeccak256(['string'], ["signed message to claim tokens"]);
             const arrayfiedHash = ethers.utils.arrayify(messageHash);
             const signature = await owner.signMessage(arrayfiedHash);
@@ -43,13 +46,19 @@ const usePolygonBridge = (bridgeAddress: string) => {
 
     const sendERC20 = async(account: string, tokenAddres: string, name: string, symbol: string, amount: string, networkToBridge: number) => {
         try {
+            const owner = await library.getSigner();
             const sourceToken = await contract.getSourceTokenFromTarget(tokenAddres);
-            const tx = await contract.destroyTokens(tokenAddres, amount);
+
+            const deadline = ethers.constants.MaxUint256;
+            const token =  new Contract(tokenAddres, BASE_TOKEN_ABI, library.getSigner(account));
+            const {v, r, s} = await getPermitSignature(owner, token, bridgeAddress, amount, deadline);
+
+            const tx = await contract.destroyTokens(tokenAddres, amount, deadline, v, r, s);
             setIsSendLoading(true);
             setTxHashSend(tx.hash);
             await tx.wait();
             upadteLocalStorage(tx.hash, account, sourceToken, name, symbol, amount, 
-                               getNetworkName(chainId), getNetworkName(networkToBridge), tx.hash); // from goerli to mumbai
+            getNetworkName(chainId), getNetworkName(networkToBridge), tx.hash); // from goerli to mumbai
             setSendError(null);
         } catch (error) {
             setSendError(error);
