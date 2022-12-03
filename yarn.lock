@@ -4286,6 +4286,11 @@
   "resolved" "https://registry.npmjs.org/prettier/-/prettier-2.3.2.tgz"
   "version" "2.3.2"
 
+"primeflex@^3.3.0":
+  "integrity" "sha512-4hvyIO7lERN5bnyURn67Qpozghins8Jq/GSXO6tymc3oa2ADHWuiYBti8ZptPwHu+uD/HTEisS26NEmeIGfPZQ=="
+  "resolved" "https://registry.npmjs.org/primeflex/-/primeflex-3.3.0.tgz"
+  "version" "3.3.0"
+
 "primeicons@^5.0.0 || ^6.0.0", "primeicons@^6.0.1":
   "integrity" "sha512-KDeO94CbWI4pKsPnYpA1FPjo79EsY9I+M8ywoPBSf9XMXoe/0crjbUK7jcQEDHuc0ZMRIZsxH3TYLv4TUtHmAA=="
   "resolved" "https://registry.npmjs.org/primeicons/-/primeicons-6.0.1.tgz"

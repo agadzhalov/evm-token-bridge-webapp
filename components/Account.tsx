@@ -5,6 +5,7 @@ import { injected, walletConnect } from "../connectors";
 import useENSName from "../hooks/useENSName";
 import useMetaMaskOnboarding from "../hooks/useMetaMaskOnboarding";
 import { formatEtherscanLink, shortenHex } from "../util";
+import { Button } from 'primereact/button';
 
 type AccountProps = {
   triedToEagerConnect: boolean;
@@ -44,7 +45,10 @@ const Account = ({ triedToEagerConnect }: AccountProps) => {
     return (
       <div>
         {isWeb3Available ? (
-          <button
+          <Button
+            label={isMetaMaskInstalled ? "Connect to MetaMask" : "Connect to Wallet"}
+            type="button" 
+            className="mr-3 p-button-raised p-button-warning"
             disabled={connecting}
             onClick={() => {
               setConnecting(true);
@@ -58,15 +62,15 @@ const Account = ({ triedToEagerConnect }: AccountProps) => {
                 }
               });
             }}
-          >
-            {isMetaMaskInstalled ? "Connect to MetaMask" : "Connect to Wallet"}
-          </button>
+          />
           
         ) : (
           <button onClick={startOnboarding}>Install Metamask</button>
         )}
-        {(<button
-            disabled={connecting}
+        {(<Button 
+            label="Wallet Connect" 
+            type="button" 
+            className="p-button-outlined" 
             onClick={async () => {
               try {
                 await activate(walletConnect(), undefined, true)
@@ -77,9 +81,7 @@ const Account = ({ triedToEagerConnect }: AccountProps) => {
                   setError(error);
                 }
               }
-            }}>
-            Wallet Connect
-          </button>)
+            }} />)
         }
       </div>
     );
