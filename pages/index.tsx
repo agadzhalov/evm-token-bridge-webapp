@@ -2,14 +2,13 @@ import { useWeb3React } from "@web3-react/core";
 import Head from "next/head";
 import Link from "next/link";
 import Account from "../components/Account";
-import EthereumNetwork from "../components/ethereum/EthereumNetwork";
 import Menu from "../components/Menu";
 import NativeCurrencyBalance from "../components/NativeCurrencyBalance";
-import PolygonNetwork from "../components/polygon/PolygonNetwork";
+import TransferContainer from "../components/transfer/TransferContainer";
 import SwitchNetwork from "../components/SwitchNetwork";
 import TokenBalance from "../components/TokenBalance";
-import USLibrary from "../components/USLibrary";
 import { ALBT_TOKEN_ADDRESS, ETHEREUM_BRIDGE_GOERLI, ETHEREUM_TOKEN_BRIDGE, POLYGON_BRIDGE_MUMBAI, US_ELECTION_ADDRESS } from "../constants";
+import { GOERLI_CHAIN_ID, MUMBAI_CHAIN_ID } from "../constants/networks";
 import useEagerConnect from "../hooks/useEagerConnect";
 
 function Home() {
@@ -43,8 +42,7 @@ function Home() {
             <NativeCurrencyBalance />
             <Menu page="Transfer" />
             <SwitchNetwork />
-            {chainId == 5 && (<EthereumNetwork bridgeContractAddress={ETHEREUM_BRIDGE_GOERLI} />)}
-            {chainId == 80001 && (<PolygonNetwork bridgeContractAddress={POLYGON_BRIDGE_MUMBAI} />)}
+            <TransferContainer />
           </section>
         )}
       </main>
