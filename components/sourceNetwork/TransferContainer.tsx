@@ -11,6 +11,7 @@ import ChooseToken from "./ChooseToken";
 import ERC20_ABI from "../../contracts/ERC20.json";
 import TransferButton from "./TransferButton";
 import useTokenDetails from "../../hooks/useTokenDetails";
+import ChooseAmount from "./ChooseAmount";
 
 const TransferContainer = () => {
     const { account, library, chainId } = useWeb3React<Web3Provider>();
@@ -18,7 +19,8 @@ const TransferContainer = () => {
     
     const [networkToBridge, setNetworkToBridge] = useState<any | undefined>();
     const [tokenAddress, setTokenAddress] = useState<string | undefined>();
-    
+    const [amount, setAmount] = useState<string | undefined>();
+
     const {name, symbol, balance} = useTokenDetails(tokenAddress, ERC20_ABI);
 
     useEffect(() => {
@@ -29,6 +31,7 @@ const TransferContainer = () => {
         <div className="results-form">
             <ChooseNetwork networkToBridge={networkToBridge} handleChooseNetwork={(networkToBridge) => setNetworkToBridge(networkToBridge) } />
             <ChooseToken tokenAddress={tokenAddress} setTokenAddress={setTokenAddress} isTokenValid={isTokenValid} setIsTokenValid={setIsTokenValid} />
+            <ChooseAmount amount={amount} setAmount={setAmount} />
             <TransferButton name={name || undefined} symbol={symbol || undefined} />
         </div>
     );
