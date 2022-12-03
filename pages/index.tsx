@@ -6,7 +6,7 @@ import EthereumNetwork from "../components/ethereum/EthereumNetwork";
 import Menu from "../components/Menu";
 import NativeCurrencyBalance from "../components/NativeCurrencyBalance";
 import PolygonNetwork from "../components/polygon/PolygonNetwork";
-import TransferContainer from "../components/transfer.tsx/TransferContainer";
+import TransferContainer from "../components/transfer/TransferContainer";
 import SwitchNetwork from "../components/SwitchNetwork";
 import TokenBalance from "../components/TokenBalance";
 import USLibrary from "../components/USLibrary";
