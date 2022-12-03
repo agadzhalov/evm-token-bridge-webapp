@@ -35,13 +35,13 @@ const TransactionsHistory = () => {
     const link = (hash: string, type: "Account" | "Transaction") => {
         if (chainId == GOERLI_CHAIN_ID) {
             return (
-                <a {...{ href: formatEtherscanLink(type, [5, hash]), target: "_blank", className: "jsx-7ef342ac1b941f10" }}>
+                <a {...{ href: formatEtherscanLink(type, [GOERLI_CHAIN_ID, hash]), target: "_blank", className: "jsx-7ef342ac1b941f10" }}>
                     {hash}
                 </a>
             )
         } else if (chainId == MUMBAI_CHAIN_ID) {
             return (
-            <a {...{ href: formatPolygonscanLink(type, [80001, hash]), target: "_blank", className: "jsx-7ef342ac1b941f10" }}>
+            <a {...{ href: formatPolygonscanLink(type, [MUMBAI_CHAIN_ID, hash]), target: "_blank", className: "jsx-7ef342ac1b941f10" }}>
                 {hash}
             </a>
             )
