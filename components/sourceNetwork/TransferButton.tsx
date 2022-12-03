@@ -9,6 +9,7 @@ import { shortenHex } from "../../util";
 import ChooseNetwork from "./ChooseNetwork";
 import ChooseToken from "./ChooseToken";
 import ERC20_ABI from "../../contracts/ERC20.json";
+import { GOERLI_CHAIN_ID, MUMBAI_CHAIN_ID } from "../../constants/networks";
 
 type Props = {
     name: string;
@@ -18,14 +19,21 @@ type Props = {
     networkToBridgeId: number;
     tokenAddress: string;
     depositERC20: any;
+    sendERC20: any;
 };
 
-const TransferButton = ({name, symbol, amount, setAmount, networkToBridgeId, tokenAddress, depositERC20}: Props) => {
+const TransferButton = ({name, symbol, amount, setAmount, networkToBridgeId, tokenAddress, depositERC20, sendERC20}: Props) => {
     const { account, library, chainId } = useWeb3React<Web3Provider>();
+    const buttonTitle = chainId == GOERLI_CHAIN_ID ? "Transfer" : chainId == MUMBAI_CHAIN_ID ? "Send" : "Unknown";
 
-    const transfer = async() => {
-        depositERC20(networkToBridgeId, account, tokenAddress, name, symbol, wei(amount));
+    const handleOnClick = async() => {
         setAmount("");
+        switch(chainId) {
+            case GOERLI_CHAIN_ID:
+                return depositERC20(networkToBridgeId, account, tokenAddress, name, symbol, wei(amount));
+            case MUMBAI_CHAIN_ID:
+                return sendERC20(account, tokenAddress, name, symbol, wei(amount), networkToBridgeId);
+        }
     }
 
     const wei = (weiAmount: string): string => {
@@ -34,7 +42,7 @@ const TransferButton = ({name, symbol, amount, setAmount, networkToBridgeId, tok
 
     return (
         <div className="results-form">
-            <input type="button" value="Trasnfer" onClick={() => transfer()} />
+            <input type="button" value={buttonTitle} onClick={() => handleOnClick()} />
         </div>
     );
 };

@@ -20,7 +20,7 @@ const ChooseNetwork = ({ networkToBridge, handleChooseNetwork }: Props) => {
     ]
 
     useEffect(() => {
-        handleChooseNetwork(MUMBAI_CHAIN_ID);
+        handleChooseNetwork(chainId == GOERLI_CHAIN_ID ? MUMBAI_CHAIN_ID : chainId == MUMBAI_CHAIN_ID ? GOERLI_CHAIN_ID : null);
     }, [])
 
     return (

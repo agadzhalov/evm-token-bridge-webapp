@@ -13,8 +13,9 @@ import TransferButton from "./TransferButton";
 import useTokenDetails from "../../hooks/useTokenDetails";
 import ChooseAmount from "./ChooseAmount";
 import useEthereumBridge from "../../hooks/useEthereumBridge";
-import { ETHEREUM_BRIDGE_GOERLI } from "../../constants";
+import { ETHEREUM_BRIDGE_GOERLI, POLYGON_BRIDGE_MUMBAI } from "../../constants";
 import PendingTX from "../view/PendingTX";
+import usePolygonBridge from "../../hooks/usePolygonBridge";
 
 const TransferContainer = () => {
     const { account, library, chainId } = useWeb3React<Web3Provider>();
@@ -26,6 +27,7 @@ const TransferContainer = () => {
 
     const {name, symbol, balance} = useTokenDetails(tokenAddress, ERC20_ABI);
     const { depositERC20, txHash: depositTxHash, isLoading: depositIsLoaidng, error: depositError } = useEthereumBridge(ETHEREUM_BRIDGE_GOERLI);
+    const { sendERC20, isSendLoading, txHashSend, sendError } = usePolygonBridge(POLYGON_BRIDGE_MUMBAI);
 
     useEffect(() => {
         fetchIsTokenValid(tokenAddress);
@@ -34,8 +36,9 @@ const TransferContainer = () => {
     return (
         <div className="results-form">
             {depositIsLoaidng && (<PendingTX txHash={depositTxHash} />)}
-            {!depositIsLoaidng && (
-                <>
+            {isSendLoading && (<PendingTX txHash={txHashSend} />)}
+            {!depositIsLoaidng && !isSendLoading && (
+                <div>
                 <ChooseNetwork networkToBridge={networkToBridge} handleChooseNetwork={(networkToBridge) => setNetworkToBridge(networkToBridge) } />
                 <ChooseToken tokenAddress={tokenAddress} setTokenAddress={setTokenAddress} isTokenValid={isTokenValid} setIsTokenValid={setIsTokenValid} />
                 <ChooseAmount amount={amount} setAmount={setAmount} />
@@ -46,8 +49,9 @@ const TransferContainer = () => {
                     setAmount={setAmount}
                     networkToBridgeId={networkToBridge}
                     tokenAddress={tokenAddress}
-                    depositERC20={depositERC20} />
-                </>
+                    depositERC20={depositERC20}
+                    sendERC20={sendERC20} />
+                </div>
             )}
             
         </div>

@@ -11,7 +11,7 @@ import SwitchNetwork from "../components/SwitchNetwork";
 import TokenBalance from "../components/TokenBalance";
 import USLibrary from "../components/USLibrary";
 import { ALBT_TOKEN_ADDRESS, ETHEREUM_BRIDGE_GOERLI, ETHEREUM_TOKEN_BRIDGE, POLYGON_BRIDGE_MUMBAI, US_ELECTION_ADDRESS } from "../constants";
-import { GOERLI_CHAIN_ID } from "../constants/networks";
+import { GOERLI_CHAIN_ID, MUMBAI_CHAIN_ID } from "../constants/networks";
 import useEagerConnect from "../hooks/useEagerConnect";
 
 function Home() {
@@ -45,9 +45,7 @@ function Home() {
             <NativeCurrencyBalance />
             <Menu page="Transfer" />
             <SwitchNetwork />
-            {/* {chainId == 5 && (<EthereumNetwork bridgeContractAddress={ETHEREUM_BRIDGE_GOERLI} />)} */}
-            {chainId == GOERLI_CHAIN_ID && (<TransferContainer />)}
-            {chainId == 80001 && (<PolygonNetwork bridgeContractAddress={POLYGON_BRIDGE_MUMBAI} />)}
+            <TransferContainer />
           </section>
         )}
       </main>
