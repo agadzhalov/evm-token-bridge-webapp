@@ -21,14 +21,14 @@ function Transfer() {
   return (
     <div>
       <Head>
-        <title>LimeAcademy-boilerplate</title>
+        <title>EVM Token Bridge</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
       <header>
         <nav>
           <Link href="/">
-            <a>LimeAcademy-boilerplate</a>
+            <a>EVM Token Bridge</a>
           </Link>
 
           <Account triedToEagerConnect={triedToEagerConnect} />

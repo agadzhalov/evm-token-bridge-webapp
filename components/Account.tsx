@@ -104,16 +104,17 @@ const Account = ({ triedToEagerConnect }: AccountProps) => {
     >
       {ENSName || `${shortenHex(account, 4)}`}
     </a>
-    <button
-          onClick={async () => {
-            try {
-              await deactivate()
-            } catch (e) { 
-              setError(error);
-            }
-          }}>
-          Disconnect
-        </button>
+    <Button 
+      label="Disconnect" 
+      className="p-button-raised p-button-danger"
+      icon="pi pi-sign-out"
+      onClick={async () => {
+        try {
+          await deactivate()
+        } catch (e) { 
+          setError(error);
+        }
+      }} />
     </>
    
     
