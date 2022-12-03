@@ -86,7 +86,6 @@ const EthereumToken = ({ account, tokenAddress, bridgeAddress, networkToBridgeId
                 </div>
             )}
             {depositIsLoaidng && (<PendingTX txHash={depositTxHash} />)}
-            
         </div>
     );
 };

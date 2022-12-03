@@ -24,6 +24,10 @@ export default function useTokenDetails<T extends Contract = Contract>(
                     setName(await contract.name());
                     setSymbol(await contract.symbol());
                     setBalance(await contract.balanceOf(account));
+                } else {
+                  setName(undefined);
+                  setSymbol(undefined);
+                  setBalance(undefined);
                 }
             }
             retrieveConractInfo();

@@ -29,7 +29,7 @@ const TransferContainer = () => {
         <div className="results-form">
             <ChooseNetwork networkToBridge={networkToBridge} handleChooseNetwork={(networkToBridge) => setNetworkToBridge(networkToBridge) } />
             <ChooseToken tokenAddress={tokenAddress} setTokenAddress={setTokenAddress} isTokenValid={isTokenValid} setIsTokenValid={setIsTokenValid} />
-            <TransferButton />
+            <TransferButton name={name || undefined} symbol={symbol || undefined} />
         </div>
     );
 };

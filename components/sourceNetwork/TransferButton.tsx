@@ -10,11 +10,21 @@ import ChooseNetwork from "./ChooseNetwork";
 import ChooseToken from "./ChooseToken";
 import ERC20_ABI from "../../contracts/ERC20.json";
 
-const TransferButton = () => {
-    
+type Props = {
+    name: string;
+    symbol: string;
+};
+
+const TransferButton = ({name, symbol}: Props) => {
+    const { account, library, chainId } = useWeb3React<Web3Provider>();
+
+    const transfer = async() => {
+        console.log(name, symbol)
+    }
+
     return (
         <div className="results-form">
-            <input type="button" value="Trasnfer" />
+            <input type="button" value="Trasnfer" onClick={() => transfer()} />
         </div>
     );
 };
