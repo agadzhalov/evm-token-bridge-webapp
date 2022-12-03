@@ -14,3 +14,12 @@ a {
 * {
   box-sizing: border-box;
 }
+
+nav {
+  display: flex;
+  justify-content: space-between;
+}
+
+main {
+  text-align: center;
+}

@@ -34,7 +34,7 @@ const TransferContainer = () => {
     }, [tokenAddress, isTokenValid])
 
     return (
-        <div className="results-form">
+        <div className="transfer">
             {depositIsLoaidng && (<PendingTX txHash={depositTxHash} />)}
             {isSendLoading && (<PendingTX txHash={txHashSend} />)}
             {!depositIsLoaidng && !isSendLoading && (

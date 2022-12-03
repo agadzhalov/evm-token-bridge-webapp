@@ -11,7 +11,7 @@ import { ALBT_TOKEN_ADDRESS, ETHEREUM_BRIDGE_GOERLI, ETHEREUM_TOKEN_BRIDGE, POLY
 import { GOERLI_CHAIN_ID, MUMBAI_CHAIN_ID } from "../constants/networks";
 import useEagerConnect from "../hooks/useEagerConnect";
 
-function Home() {
+function Transfer() {
   const { account, library, chainId } = useWeb3React();
 
   const triedToEagerConnect = useEagerConnect();
@@ -42,11 +42,22 @@ function Home() {
             <NativeCurrencyBalance />
             <Menu page="Transfer" />
             <SwitchNetwork />
+            <TransferContainer />
           </section>
         )}
       </main>
+      <style jsx>{`
+        nav {
+          display: flex;
+          justify-content: space-between;
+        }
+
+        main {
+          text-align: center;
+        }
+      `}</style>
     </div>
   );
 }
 
-export default Home;
+export default Transfer;
