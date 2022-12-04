@@ -33,6 +33,23 @@ const ClaimContainer = () => {
         }
     }
 
+    const handleTxLink = (hash: string, openChainId: number) => {
+        switch(openChainId) {
+            case GOERLI_CHAIN_ID:
+                return (
+                    <a {...{ href: formatPolygonscanLink("Transaction", [MUMBAI_CHAIN_ID, hash]), target: "_blank" }}>
+                        {hash ? shortenHex(hash, 4) : ""}
+                    </a> 
+                )
+            case MUMBAI_CHAIN_ID:
+                return (
+                    <a {...{ href: formatEtherscanLink("Transaction", [GOERLI_CHAIN_ID, hash]), target: "_blank" }}>
+                        {hash ? shortenHex(hash, 4) : ""}
+                    </a> 
+                )
+        }
+    }
+
     return (
         <div className="results-form">
             <table>
@@ -60,14 +77,10 @@ const ClaimContainer = () => {
                                 <td> <input type="button" value="Claim"
                                     onClick={() => handleClaimButton(data.id, data.token, data.amount, data.name, data.symbol)} disabled={data.claimed} /></td>
                                 <td>
-                                    <a {...{ href: formatPolygonscanLink("Transaction", [MUMBAI_CHAIN_ID, data.transferTxHash]), target: "_blank" }}>
-                                        {data.transferTxHash ? shortenHex(data.transferTxHash, 4) : ""}
-                                    </a>
+                                    {handleTxLink(data.transferTxHash, chainId == MUMBAI_CHAIN_ID ? MUMBAI_CHAIN_ID : GOERLI_CHAIN_ID)}
                                 </td>
                                 <td>
-                                    <a {...{ href: formatEtherscanLink("Transaction", [GOERLI_CHAIN_ID, data.claimTxHash]), target: "_blank" }}>
-                                        {data.claimTxHash ? shortenHex(data.claimTxHash, 4) : ""}
-                                    </a>
+                                    {handleTxLink(data.claimTxHash, chainId == MUMBAI_CHAIN_ID ? GOERLI_CHAIN_ID : MUMBAI_CHAIN_ID)}
                                 </td>
                             </tr>
                         )

@@ -18,7 +18,7 @@ const usePolygonBridge = (bridgeAddress: string) => {
     const [isClaimLoading, setIsClaimLoading] = useState<boolean | undefined>(false);
     const [claimError, setClaimError] = useState<any | undefined>();
 
-    const claimPolygonTokens = async(id: string, tokenAddres: string, amount: string, tokenName: string, tokenSymobl: string) => {
+    const claimPolygonTokens = async(id: string, tokenAddress: string, amount: string, tokenName: string, tokenSymobl: string) => {
         try {
             const owner = await library.getSigner();
             const messageHash = ethers.utils.solidityKeccak256(['string'], ["signed message to claim tokens"]);
@@ -26,7 +26,7 @@ const usePolygonBridge = (bridgeAddress: string) => {
             const signature = await owner.signMessage(arrayfiedHash);
             
             const sig = ethers.utils.splitSignature(signature);
-            const tx = await contract.claimTokens(tokenAddres, tokenName, tokenSymobl, amount, messageHash, sig.v, sig.r, sig.s);
+            const tx = await contract.claimTokens(tokenAddress, tokenName, tokenSymobl, amount, messageHash, sig.v, sig.r, sig.s);
             setIsClaimLoading(true);
             setTxHashClaim(tx.hash);
             await tx.wait();

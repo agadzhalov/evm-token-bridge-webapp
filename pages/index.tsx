@@ -52,7 +52,7 @@ function Home() {
                             {!isConnected && (<Account triedToEagerConnect={triedToEagerConnect} />)}
                             {isConnected && (
                                 <Button
-                                    className="p-button-raised p-button-danger"
+                                    className="p-button-raised p-button-primary"
                                     label="Start Bridging"
                                     onClick={href} />
                             )}
