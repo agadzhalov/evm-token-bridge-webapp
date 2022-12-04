@@ -27,6 +27,7 @@ const ChooseToken = ({ tokenAddress, setTokenAddress, isTokenValid, setIsTokenVa
             setWalletTokens(await getTokens());
         }
         retrieveTokens();
+        setTokenAddress("");
     }, [chainId])
 
     const handleChangeTokenAddress = (input) => {

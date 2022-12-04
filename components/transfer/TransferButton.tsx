@@ -33,9 +33,13 @@ const TransferButton = ({
         depositERC20, 
         sendERC20
     }: Props) => {
-        
+
     const { account, library, chainId } = useWeb3React<Web3Provider>();
     const buttonTitle = chainId == GOERLI_CHAIN_ID ? "Transfer" : chainId == MUMBAI_CHAIN_ID ? "Send" : "Unknown";
+
+    useEffect(() => {
+        setAmount("");
+    }, [chainId])
 
     const handleOnClick = async() => {
         setAmount("");
@@ -58,6 +62,7 @@ const TransferButton = ({
             icon="pi pi-send"
             type="button" 
             className="mr-3 p-button-raised p-button-primary"
+            disabled={!tokenAddress || !amount}
             onClick={() => handleOnClick()}
           />
         </div>
