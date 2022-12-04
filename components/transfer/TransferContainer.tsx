@@ -16,6 +16,7 @@ import useEthereumBridge from "../../hooks/useEthereumBridge";
 import { ETHEREUM_BRIDGE_GOERLI, POLYGON_BRIDGE_MUMBAI } from "../../constants";
 import PendingTX from "../view/PendingTX";
 import usePolygonBridge from "../../hooks/usePolygonBridge";
+import { Card } from 'primereact/card';
 
 const TransferContainer = () => {
     const { account, library, chainId } = useWeb3React<Web3Provider>();
@@ -35,6 +36,7 @@ const TransferContainer = () => {
 
     return (
         <div className="transfer">
+            <Card style={{ marginBottom: '2em' }}>
             {depositIsLoaidng && (<PendingTX txHash={depositTxHash} />)}
             {isSendLoading && (<PendingTX txHash={txHashSend} />)}
             {!depositIsLoaidng && !isSendLoading && (
@@ -53,7 +55,7 @@ const TransferContainer = () => {
                     sendERC20={sendERC20} />
                 </div>
             )}
-            
+            </Card>
         </div>
     );
 };

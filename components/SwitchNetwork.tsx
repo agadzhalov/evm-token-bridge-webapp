@@ -81,20 +81,5 @@ export default function SwitchNetwork() {
                 label={switchToNework()}
                 onClick={() => handleNetworkSwitch(chainId == GOERLI_CHAIN_ID ? MUMBAI_CHAIN_ID : chainId == MUMBAI_CHAIN_ID ? GOERLI_CHAIN_ID : 0)} />
         </Card>
-        // <div className="credit-card w-full lg:w-1/2 sm:w-auto shadow-lg mx-auto rounded-xl bg-white">
-        //     <main className="mt-4 p-4">
-        //         <p>
-        //             
-        //         </p>
-        //         <div className="mt-4">
-        //         <button
-        //                 
-        //                 className="mt-2 mb-2 bg-warning border-warning btn submit-button focus:ring focus:outline-none w-full"
-        //             >
-        //                 Switch to { chainId == 5 ? "Mumbai" : chainId == 80001 ? "Goerli" : "Error" }
-        //             </button>
-        //         </div>
-        //     </main>
-        // </div>
     );
 }

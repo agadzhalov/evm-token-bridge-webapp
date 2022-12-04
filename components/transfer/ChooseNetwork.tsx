@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import { GOERLI_CHAIN_ID, MUMBAI_CHAIN_ID } from "../../constants/networks";
 import useGetWalletTokens from "../../hooks/useGetWalletTokens";
 import { shortenHex } from "../../util";
+import { Dropdown } from 'primereact/dropdown';
 
 type Props = {
     networkToBridge: number;
@@ -15,28 +16,28 @@ const ChooseNetwork = ({ networkToBridge, handleChooseNetwork }: Props) => {
     const { account, library, chainId } = useWeb3React<Web3Provider>();
     
     const networks = [
-        {id: GOERLI_CHAIN_ID, name: "goerli"},
-        {id: MUMBAI_CHAIN_ID, name: "mumbai"},
+        {label: "goerli", value: GOERLI_CHAIN_ID, disabled: chainId === GOERLI_CHAIN_ID },
+        {label: "mumbai", value: MUMBAI_CHAIN_ID, disabled: chainId === MUMBAI_CHAIN_ID }
     ]
 
     useEffect(() => {
         handleChooseNetwork(chainId == GOERLI_CHAIN_ID ? MUMBAI_CHAIN_ID : chainId == MUMBAI_CHAIN_ID ? GOERLI_CHAIN_ID : null);
-    }, [])
+    }, [chainId])
 
     return (
         <div className="results-form">
-            <div className="network-to-bridge">
-                <label>Choose network to bridge to</label>
-                <select
-                    value={networkToBridge}
-                    onChange={(e) => handleChooseNetwork(e.target.value)}
-                >
-                    {networks.map((network, index) => {
-                        return (<option value={network.id} key={index} disabled={ chainId === network.id }>
-                            {network.name} 
-                        </option>)
-                    })}
-                </select>
+            <div className="p-fluid grid">
+                <div className="field col-12">
+                    <span className="p-float-label">
+                        <Dropdown 
+                            inputId="dropdown" 
+                            value={networkToBridge} 
+                            optionLabel="label" 
+                            options={networks} 
+                            onChange={(e) => handleChooseNetwork(e.target.value)} />
+                        <label htmlFor="dropdown">Choose network to bridge to</label>
+                    </span>
+                </div>
             </div>
         </div>
     );
