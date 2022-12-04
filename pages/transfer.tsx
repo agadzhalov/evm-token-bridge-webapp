@@ -36,16 +36,6 @@ function Transfer() {
           </section>
         )}
       </main>
-      <style jsx>{`
-        nav {
-          display: flex;
-          justify-content: space-between;
-        }
-
-        main {
-          text-align: center;
-        }
-      `}</style>
     </div>
   );
 }

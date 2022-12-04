@@ -1,6 +1,9 @@
 import { Web3Provider } from "@ethersproject/providers";
 import { useWeb3React } from "@web3-react/core";
 import { useState, useEffect } from "react";
+import { Card } from 'primereact/card';
+import { Button } from 'primereact/button';
+import { GOERLI_CHAIN_ID, MUMBAI_CHAIN_ID } from "../constants/networks";
 
 const networks = {
     polygon: {
@@ -62,21 +65,36 @@ export default function SwitchNetwork() {
         };
     }, []);
 
+    const currentNetwork = () => {
+        const network = chainId == 5 ? "Goerli" : chainId == 80001 ? "Mumbai" : "Error";
+        return "Current is " + network;
+    }
+
+    const switchToNework = () => {
+        const network = chainId == 5 ? "Mumbai" : chainId == 80001 ? "Goerli" : "Error";
+        return "Switch to " + network;
+    }
+
     return (
-        <div className="credit-card w-full lg:w-1/2 sm:w-auto shadow-lg mx-auto rounded-xl bg-white">
-            <main className="mt-4 p-4">
-                <p>
-                    Current: <b>{ chainId == 5 ? "Goerli" : chainId == 80001 ? "Mumbai" : "Error" }</b>
-                </p>
-                <div className="mt-4">
-                <button
-                        onClick={() => handleNetworkSwitch(chainId == 5 ? 80001 : chainId == 80001 ? 5 : 0)}
-                        className="mt-2 mb-2 bg-warning border-warning btn submit-button focus:ring focus:outline-none w-full"
-                    >
-                        Switch to { chainId == 5 ? "Mumbai" : chainId == 80001 ? "Goerli" : "Error" }
-                    </button>
-                </div>
-            </main>
-        </div>
+        <Card title={currentNetwork()} style={{ marginBottom: '2em' }}>
+            <Button
+                label={switchToNework()}
+                onClick={() => handleNetworkSwitch(chainId == GOERLI_CHAIN_ID ? MUMBAI_CHAIN_ID : chainId == MUMBAI_CHAIN_ID ? GOERLI_CHAIN_ID : 0)} />
+        </Card>
+        // <div className="credit-card w-full lg:w-1/2 sm:w-auto shadow-lg mx-auto rounded-xl bg-white">
+        //     <main className="mt-4 p-4">
+        //         <p>
+        //             
+        //         </p>
+        //         <div className="mt-4">
+        //         <button
+        //                 
+        //                 className="mt-2 mb-2 bg-warning border-warning btn submit-button focus:ring focus:outline-none w-full"
+        //             >
+        //                 Switch to { chainId == 5 ? "Mumbai" : chainId == 80001 ? "Goerli" : "Error" }
+        //             </button>
+        //         </div>
+        //     </main>
+        // </div>
     );
 }

@@ -14,9 +14,9 @@ const Menu = ({index}: Menu) => {
 
     const items = [
         {label: 'Home', icon: 'pi pi-fw pi-home'},
-        {label: 'Transfer', icon: 'pi pi-fw pi-calendar'},
-        {label: 'Claim', icon: 'pi pi-fw pi-pencil'},
-        {label: 'History', icon: 'pi pi-fw pi-file'}
+        {label: 'Transfer', icon: 'pi pi-send'},
+        {label: 'Claim', icon: 'pi pi-download'},
+        {label: 'History', icon: 'pi pi-history'}
     ];
 
     const handleOnTabChangeRouting = (event: any) => {
@@ -34,16 +34,8 @@ const Menu = ({index}: Menu) => {
     }
 
     return (
-        <div>
-            <div className="card">
-                <TabMenu model={items} activeIndex={activeIndex} onTabChange={(e) => handleOnTabChangeRouting(e)} />
-            </div>
-            {/* <div>
-                <Link href="/"><a>Home</a></Link> {" | "}
-                <Link href="/transfer"><a>Transfer</a></Link> {" | "}
-                <Link href="/claim"><a>Claim</a></Link> {" | "}
-                <Link href="/history"><a>TxHistory</a></Link>
-            </div> */}
+        <div className="menu">
+            <TabMenu model={items} activeIndex={activeIndex} onTabChange={(e) => handleOnTabChangeRouting(e)} />
         </div>
     );
 }
