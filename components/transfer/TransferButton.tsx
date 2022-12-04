@@ -10,6 +10,7 @@ import ChooseNetwork from "./ChooseNetwork";
 import ChooseToken from "./ChooseToken";
 import ERC20_ABI from "../../contracts/ERC20.json";
 import { GOERLI_CHAIN_ID, MUMBAI_CHAIN_ID } from "../../constants/networks";
+import { Button } from 'primereact/button';
 
 type Props = {
     name: string;
@@ -42,7 +43,12 @@ const TransferButton = ({name, symbol, amount, setAmount, networkToBridgeId, tok
 
     return (
         <div className="results-form">
-            <input type="button" value={buttonTitle} onClick={() => handleOnClick()} />
+            <Button
+            label={buttonTitle}
+            type="button" 
+            className="mr-3 p-button-raised p-button-primary"
+            onClick={() => handleOnClick()}
+          />
         </div>
     );
 };
