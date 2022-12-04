@@ -78,6 +78,7 @@ export default function SwitchNetwork() {
     return (
         <Card title={currentNetwork()} style={{ marginBottom: '2em' }}>
             <Button
+                className="p-button-raised p-button-rounded"
                 label={switchToNework()}
                 onClick={() => handleNetworkSwitch(chainId == GOERLI_CHAIN_ID ? MUMBAI_CHAIN_ID : chainId == MUMBAI_CHAIN_ID ? GOERLI_CHAIN_ID : 0)} />
         </Card>

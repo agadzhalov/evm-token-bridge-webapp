@@ -5,6 +5,9 @@ import { useEffect, useState } from "react";
 import { GOERLI_CHAIN_ID, MUMBAI_CHAIN_ID } from "../../constants/networks";
 import useGetWalletTokens from "../../hooks/useGetWalletTokens";
 import { shortenHex } from "../../util";
+import { ProgressSpinner } from 'primereact/progressspinner';
+import { Dropdown } from 'primereact/dropdown';
+import { InputText } from 'primereact/inputtext';
 
 type Props = {
     tokenAddress: string;
@@ -37,27 +40,34 @@ const ChooseToken = ({ tokenAddress, setTokenAddress, isTokenValid, setIsTokenVa
     return (
         <div className="results-form">
             <div className="choose-tokens">
-                <label>Choose Token</label>
-                {isLoadingTokens && (" .... Loading tokens from wallet ....")}
-                {!isLoadingTokens && walletTokens && (
-                    <select
-                        value={tokenAddress}
-                        onChange={(e) => setTokenAddress(e.target.value)}
-                    >   
-                        <option value=""></option>
-                        {walletTokens.map((token, index) => {
-                            return (<option value={token.address} key={index}>
-                                        {token.name} | {token.symbol} | {token.balance} | {shortenHex(token.address, 4)}
-                                    </option>)
-                        })}
-                    </select>
-                )}
-                <br/>
-                <label>Choose Address</label>
-                <input onChange={handleChangeTokenAddress} value={tokenAddress || ''} type="text" name="token_address" />
-                <br/>
-                {!isValidAddress() && tokenAddress !== undefined && tokenAddress.length > 0 && ("Please enter valid address")}
-                {isValidAddress() && !isTokenValid &&  ("Valid address, but not a valid token")}
+                <div className="p-fluid grid">
+                    <div className="field col-12">
+                        {isLoadingTokens && (<ProgressSpinner style={{ width: '50px', height: '50px' }} strokeWidth="2" fill="var(--surface-ground)" animationDuration=".5s" />)}
+                        {!isLoadingTokens && walletTokens && (
+                            <span className="p-float-label">
+                                <Dropdown
+                                    inputId="dropdown"
+                                    value={tokenAddress}
+                                    optionLabel="name"
+                                    options={walletTokens}
+                                    onChange={(e) => setTokenAddress(e.target.value)} />
+                                <label htmlFor="dropdown">Choose token</label>
+                            </span>
+                        )}
+                    </div>
+                    {!isValidAddress() && tokenAddress !== undefined && tokenAddress.length > 0 && (
+                        <div className="field col-12" style={{color: "red"}}>Please enter valid address</div>
+                    )}
+                    {isValidAddress() && !isTokenValid && (
+                        <div className="field col-12" style={{color: "red"}}>Valid address, but not a valid token</div>
+                    )}
+                    <div className="field col-12">
+                        <span className="p-float-label">
+                            <InputText id="in" value={tokenAddress || ''} onChange={handleChangeTokenAddress} />
+                            <label htmlFor="in">Choose Address</label>
+                        </span>
+                    </div>
+                </div>
             </div>
         </div>
     );

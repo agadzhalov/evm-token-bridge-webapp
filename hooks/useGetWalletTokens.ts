@@ -4,6 +4,7 @@ import { Alchemy, Network } from "alchemy-sdk";
 import { useWeb3React } from "@web3-react/core";
 import { Web3Provider } from "@ethersproject/providers";
 import { ethers } from "ethers";
+import { shortenHex } from "../util";
 
 const CONFIG_GOERLI = {
     // use dotenv here
@@ -41,10 +42,8 @@ const useGetWalletTokens = () => {
 
             // Print name, balance, and symbol of token
             tokens.push({
-                address: token.contractAddress,
-                name: metadata.name,
-                symbol: metadata.symbol,
-                balance: ethers.utils.formatEther(balance)
+                name: metadata.name + " | " + metadata.symbol + " | " + shortenHex(token.contractAddress, 4) + " | " + ethers.utils.formatEther(balance),
+                value: token.contractAddress
             })
         }
         setIsLoadingTokens(false);
