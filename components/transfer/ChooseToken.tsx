@@ -64,7 +64,7 @@ const ChooseToken = ({ tokenAddress, setTokenAddress, isTokenValid, setIsTokenVa
                     <div className="field col-12">
                         <span className="p-float-label">
                             <InputText id="in" value={tokenAddress || ''} onChange={handleChangeTokenAddress} />
-                            <label htmlFor="in">Choose Address</label>
+                            <label htmlFor="in">Choose address</label>
                         </span>
                     </div>
                 </div>

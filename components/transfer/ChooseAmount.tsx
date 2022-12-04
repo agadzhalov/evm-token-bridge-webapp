@@ -1,5 +1,6 @@
 import { Web3Provider } from "@ethersproject/providers";
 import { useWeb3React } from "@web3-react/core";
+import { InputText } from 'primereact/inputtext';
 
 type Props = {
     amount: string;
@@ -18,8 +19,13 @@ const ChooseAmount = ({amount, setAmount}: Props) => {
 
     return (
         <div className="results-form">
-            <label>Choose amount:</label>
-            <input onChange={(e) => handleAmountToken(e)} value={amount || ""} type="text" name="token_amount" />
+            <div className="p-fluid grid">
+                <div className="field col-12">
+                    <span className="p-float-label">
+                        <InputText id="in" value={amount || ""} onChange={(e) => handleAmountToken(e)} />
+                        <label htmlFor="in">Choose amount</label>
+                    </span></div>
+            </div>
         </div>
     );
 };
