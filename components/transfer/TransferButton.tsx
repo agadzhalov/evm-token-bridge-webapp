@@ -62,7 +62,7 @@ const TransferButton = ({
             icon="pi pi-send"
             type="button" 
             className="mr-3 p-button-raised p-button-primary"
-            disabled={!tokenAddress || !amount}
+            disabled={!name || !amount}
             onClick={() => handleOnClick()}
           />
         </div>

@@ -23,7 +23,7 @@ const ChooseAmount = ({amount, setAmount}: Props) => {
                 <div className="field col-12">
                     <span className="p-float-label">
                         <InputText id="in" value={amount || ""} onChange={(e) => handleAmountToken(e)} />
-                        <label htmlFor="in">Choose amount</label>
+                        <label htmlFor="in">Choose amount*</label>
                     </span></div>
             </div>
         </div>

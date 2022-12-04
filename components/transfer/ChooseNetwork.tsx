@@ -35,7 +35,7 @@ const ChooseNetwork = ({ networkToBridge, handleChooseNetwork }: Props) => {
                             optionLabel="label" 
                             options={networks} 
                             onChange={(e) => handleChooseNetwork(e.target.value)} />
-                        <label htmlFor="dropdown">Choose network to bridge to</label>
+                        <label htmlFor="dropdown">Choose network to bridge to*</label>
                     </span>
                 </div>
             </div>

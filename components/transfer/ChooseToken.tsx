@@ -52,7 +52,7 @@ const ChooseToken = ({ tokenAddress, setTokenAddress, isTokenValid, setIsTokenVa
                                     optionLabel="name"
                                     options={walletTokens}
                                     onChange={(e) => setTokenAddress(e.target.value)} />
-                                <label htmlFor="dropdown">Choose token</label>
+                                <label htmlFor="dropdown">Choose token*</label>
                             </span>
                         )}
                     </div>
