@@ -1,10 +1,7 @@
 import type { Web3Provider } from "@ethersproject/providers";
 import { useWeb3React } from "@web3-react/core";
-import { ethers } from "ethers";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { GOERLI_CHAIN_ID, MUMBAI_CHAIN_ID } from "../../constants/networks";
-import useGetWalletTokens from "../../hooks/useGetWalletTokens";
-import { shortenHex } from "../../util";
 import { Dropdown } from 'primereact/dropdown';
 
 type Props = {

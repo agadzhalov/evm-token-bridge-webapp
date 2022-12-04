@@ -15,9 +15,6 @@ export const walletConnectSupportedNetworks: Networks = {
 // Network chain ids
 export const supportedMetamaskNetworks = [1, 3, 4, 5, 42, 137, 31337, 80001];
 
-export const ALBT_TOKEN_ADDRESS = "0xc6869a93ef55e1d8ec8fdcda89c9d93616cf0a72";
-export const US_ELECTION_ADDRESS = "0xA09fF4F39FD8553051ABf0188100b7C5A6dc5452";
-
 export const ETHEREUM_TOKEN_BRIDGE = "0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512";
 
 export const ETHEREUM_BRIDGE_GOERLI = "0x2759a3c726cB59b70bb4B80C73bE20Aa3Dd125C0";

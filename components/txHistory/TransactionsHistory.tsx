@@ -1,14 +1,7 @@
 import type { Web3Provider } from "@ethersproject/providers";
 import { useWeb3React } from "@web3-react/core";
-import { BigNumber, ethers } from "ethers";
-import { useCallback, useEffect, useState } from "react";
-import { EthereumBridge } from "../../contracts/types";
-import useApproveToken from "../../hooks/useApproveToken";
-import useEthereumBridge from "../../hooks/useEthereumBridge";
-import usePolygonBridge from "../../hooks/usePolygonBridge";
-import useTokenBalance from "../../hooks/useTokenBalance";
-import useTokenContract from "../../hooks/useTokenContract";
-import PendingTX from "../view/PendingTX";
+import { ethers } from "ethers";
+import { useEffect, useState } from "react";
 import axios from 'axios';
 import useTxsHistory from "../../hooks/useTxsHistory";
 import { formatEtherscanLink, formatPolygonscanLink } from "../../util";
