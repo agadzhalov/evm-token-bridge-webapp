@@ -29,8 +29,7 @@ function Claim() {
               
         {isConnected && (
           <section>
-            <NativeCurrencyBalance />
-            <Menu page="Claim" />
+            <Menu index={2} />
             <SwitchNetwork />
             <ClaimContainer />
           </section>

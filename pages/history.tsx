@@ -29,8 +29,7 @@ function History() {
               
         {isConnected && (
           <section>
-            <NativeCurrencyBalance />
-            <Menu page="Transactions History" />
+            <Menu index={3} />
             <SwitchNetwork />
             <TransactionsHistory />
           </section>

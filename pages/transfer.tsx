@@ -30,7 +30,7 @@ function Transfer() {
         
         {isConnected && (
           <section>
-            <Menu page="Transfer" />
+            <Menu index={1} />
             <SwitchNetwork />
             <TransferContainer />
           </section>
