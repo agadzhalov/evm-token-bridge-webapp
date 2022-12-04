@@ -30,6 +30,7 @@ const usePolygonBridge = (bridgeAddress: string) => {
             
             const sig = ethers.utils.splitSignature(signature);
             const tx = await contract.claimTokens(tokenAddress, tokenName, tokenSymobl, amount, messageHash, sig.v, sig.r, sig.s);
+            setIsMetaMaskLoading(false);
             setIsClaimLoading(true);
             setTxHashClaim(tx.hash);
             await tx.wait();
