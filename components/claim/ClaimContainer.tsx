@@ -7,7 +7,10 @@ import useEthereumBridge from "../../hooks/useEthereumBridge";
 import usePolygonBridge from "../../hooks/usePolygonBridge";
 import { formatEtherscanLink, formatPolygonscanLink, shortenHex } from "../../util";
 import PendingTX from "../view/PendingTX";
-
+import { DataTable } from 'primereact/datatable';
+import { Column } from 'primereact/column';
+import { Button } from 'primereact/button';
+import { Card } from 'primereact/card';
 
 const ClaimContainer = () => {
     const { account, library, chainId } = useWeb3React();
@@ -38,68 +41,74 @@ const ClaimContainer = () => {
             case GOERLI_CHAIN_ID:
                 return (
                     <a {...{ href: formatPolygonscanLink("Transaction", [MUMBAI_CHAIN_ID, hash]), target: "_blank" }}>
-                        {hash ? shortenHex(hash, 4) : ""}
+                        {hash ? hash : ""}
                     </a> 
                 )
             case MUMBAI_CHAIN_ID:
                 return (
                     <a {...{ href: formatEtherscanLink("Transaction", [GOERLI_CHAIN_ID, hash]), target: "_blank" }}>
-                        {hash ? shortenHex(hash, 4) : ""}
+                        {hash ? hash : ""}
                     </a> 
                 )
         }
     }
 
+    const getFilteredAndSortedDescData = (data: any) => {
+        return data.filter(data => data.account == account && data.to == getNetworkName(chainId)).sort().reverse();
+    }
+
     return (
         <div className="results-form">
-            <table>
-                <thead>
-                    <tr>
-                        <th>from</th>
-                        <th>to</th>
-                        <th>token</th>
-                        <th>amount</th>
-                        <th>action</th>
-                        <th>transferTx</th>
-                        <th>claimTx</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {isUnlockLoading && (<PendingTX txHash={txHashUnlock} />)}
-                    {isClaimLoading && (<PendingTX txHash={txHashClaim} />)}
-                    {claimData && claimData.filter(data => data.account == account && data.to == getNetworkName(chainId)).map((data, index) => {
-                        return (
-                            <tr key={index}>
-                                <td>{data.from}</td>
-                                <td>{data.to}</td>
-                                <td>{data.symbol ? data.symbol : "----"} | {shortenHex(data.token, 4)}</td>
-                                <td>{ethers.utils.formatEther(data.amount)}</td>
-                                <td> <input type="button" value="Claim"
-                                    onClick={() => handleClaimButton(data.id, data.token, data.amount, data.name, data.symbol)} disabled={data.claimed} /></td>
-                                <td>
-                                    {handleTxLink(data.transferTxHash, chainId == MUMBAI_CHAIN_ID ? MUMBAI_CHAIN_ID : GOERLI_CHAIN_ID)}
-                                </td>
-                                <td>
-                                    {handleTxLink(data.claimTxHash, chainId == MUMBAI_CHAIN_ID ? GOERLI_CHAIN_ID : MUMBAI_CHAIN_ID)}
-                                </td>
-                            </tr>
-                        )
-                    })}
-                </tbody>
-            </table>
-            <style jsx>{`
-            .results-form {
-                width: 50%;
-                margin: 0 auto;
-            }
-            table tr td, table tr th{
-                border: 1px solid #000;
-            }
-            a {
-                color: blue;
-                text-decoration: underline;
-            }
-        `}</style>
+
+            {isUnlockLoading && (
+                <Card className="claim-loading-card">
+                <PendingTX txHash={txHashUnlock} />
+                </Card>
+            )}
+
+            {isClaimLoading && (
+                <Card className="claim-loading-card">
+                    <PendingTX txHash={txHashClaim} />
+                </Card>
+            )}
+            
+            {!isUnlockLoading && !isClaimLoading && claimData && (
+            <DataTable 
+                    value={getFilteredAndSortedDescData(claimData)} 
+                    paginator 
+                    responsiveLayout="scroll"
+                    stripedRows
+                    currentPageReportTemplate="Showing {first} to {last} of {totalRecords}" rows={10} rowsPerPageOptions={[10,20,50]}
+                >
+                <Column field="from" header="From" ></Column>
+                <Column field="to" header="To" ></Column>
+                <Column field="token" header="Token"></Column>
+
+                <Column field="amount" header="Amount"  body={(data) => (
+                    ethers.utils.formatEther(data.amount)
+                )}></Column>
+
+                <Column field="action" header="Action"  body={(data) =>
+                    <Button
+                        label="Claim"
+                        icon="pi pi-download"
+                        type="button" 
+                        className="p-button-raised p-button-primary"
+                        disabled={data.claimed}
+                        onClick={() => handleClaimButton(data.id, data.token, data.amount, data.name, data.symbol)}
+                    />
+                }></Column>
+
+                <Column field="transferTxHash" header="TransferTx" className="link" body={(data) => (
+                    handleTxLink(data.transferTxHash, chainId == MUMBAI_CHAIN_ID ? MUMBAI_CHAIN_ID : GOERLI_CHAIN_ID)
+                )}> 
+                </Column>
+
+                <Column field="claimTxHash" header="ClaimTx" className="link" body={(data) => (
+                    handleTxLink(data.claimTxHash, chainId == MUMBAI_CHAIN_ID ? GOERLI_CHAIN_ID : MUMBAI_CHAIN_ID)
+                )}></Column>
+            </DataTable>
+            )}
         </div>
     );
 };
