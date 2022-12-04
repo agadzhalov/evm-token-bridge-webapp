@@ -12,6 +12,7 @@ import { Column } from 'primereact/column';
 import { Button } from 'primereact/button';
 import { Card } from 'primereact/card';
 import { ProgressSpinner } from 'primereact/progressspinner';
+import Error from "../view/Error";
 
 const ClaimContainer = () => {
     const { account, library, chainId } = useWeb3React();
@@ -71,6 +72,9 @@ const ClaimContainer = () => {
 
     return (
         <div className="results-form">
+            {claimError && (<Error error={JSON.stringify(claimError)} />)}
+            {unlockError && (<Error error={JSON.stringify(unlockError)} />)}
+
             {!isUnlockLoading && !isClaimLoading && !claimMetaMaskLoading && !unlockMetaMaskLoading && claimData && (
             <DataTable 
                     value={getFilteredAndSortedDescData(claimData)} 
