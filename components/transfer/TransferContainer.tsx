@@ -18,6 +18,7 @@ import PendingTX from "../view/PendingTX";
 import usePolygonBridge from "../../hooks/usePolygonBridge";
 import { Card } from 'primereact/card';
 import { ProgressSpinner } from 'primereact/progressspinner';
+import Error from "../view/Error";
 
 const TransferContainer = () => {
     const { account, library, chainId } = useWeb3React<Web3Provider>();
@@ -46,6 +47,9 @@ const TransferContainer = () => {
 
     return (
         <div className="transfer">
+            {depositError && (<Error error={JSON.stringify(depositError)} />)}
+            {sendError && (<Error error={JSON.stringify(sendError)} />)}
+            
             <Card style={{ marginBottom: '2em' }}>
             {!transferMetaMaskLoading && !sendMetaMaskLoading && (
                <div>
