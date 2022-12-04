@@ -1,57 +1,36 @@
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fmirshko%2Fnext-web3-boilerplate)
+# evm-token-bridge-webapp
+EVM Token Bridge Web Application where users can Lock, Unlock and Claim their ERC20 tokens
 
-This is a default [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app), customized as the default boilerplate for new Web3 projects.
 
-## Features
-
-- Separate packages from [ethers.js](https://docs.ethers.io/v5/) for improved tree-shaking, often only ethers Contracts
-- Hooks-first approach to fetching and caching data from Contracts and memoization for performance with [SWR](https://swr.vercel.app)
-- [web3-react](https://github.com/NoahZinsmeister/web3-react) for ease of connecting to Web3 providers with a solid API
-- Auto-generates types for the contract ABIs in the `/contracts` folder via [TypeChain](https://github.com/ethereum-ts/TypeChain)
-- MetaMask connection
-- WalletConnect connection
-
-### Auto Contract Type Generation
-
-**Note**: After adding in your new contract ABIs (in JSON format) to the `/contracts` folder, run `yarn compile-contract-types` to generate the types.
-
-You can import these types when declaring a new Contract hook. The types generated show the function params and return types of your functions, among other helpful types. 
-
-```ts
-import MY_CONTRACT_ABI from "../contracts/MY_CONTRACT.json";
-import type { MY_CONTRACT } from "../contracts/types";
-import useContract from "./useContract";
-
-export default function useMyContract() {
-  return useContract<MY_CONTRACT>(CONTRACT_ADDRESS, MY_CONTRACT_ABI);
-}
-```
-
-## Getting Started
-
-First, run the development server:
-
+## Installment
+Make sure you are in the directory of the cloned project then
 ```bash
-npm run dev
-# or
-yarn dev
+  npm install
+```
+## Contracts
+You will need to have two deployed smart contracts in advance, one on Goerli testnet and one on Mumbai testnet. Add the addresses in `constants/index.ts` like this: 
+```bash
+export const ETHEREUM_BRIDGE_GOERLI = "0x2759a3c726cB59b70bb4B80C73bE20Aa3Dd125C0";
+export const POLYGON_BRIDGE_MUMBAI = "0x6DeFf377FA433F879d2cfDA5F169352b1e4335DD";
 ```
 
-Open [http://localhost:4001](http://localhost:4001) with your browser to see the result.
+## Mumbai wallet
+Make sure you have added Mumbai network in advance to your wallet because implementation in the project is done with  `wallet_switchEthereumChain` instead of `wallet_addEthereumChain`. Feel free to contribute!
 
-You can start editing the page by modifying `pages/index.js`. The page auto-updates as you edit the file.
+## API Keys
+Replace the API keys for `api-goerli` and `api-goerli` in `hooks/useTxsHistory.ts` in `getApiKeyByNetwork()` like this: 
 
-## Learn More
+```javascript I'm A tab
+switch(chainId) {
+  case 5:
+    return GOERL_API;
+  case 80001: 
+    return MUMBAI_API; 
+```
+This logic needs to be moved in webpack environment variables. Feel free to contribute!
 
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/import?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+## Run
+To star this beautiful project execute: 
+```bash
+  npm run dev
+```
