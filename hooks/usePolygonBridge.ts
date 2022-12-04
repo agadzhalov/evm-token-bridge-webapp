@@ -20,6 +20,8 @@ const usePolygonBridge = (bridgeAddress: string) => {
     const [claimError, setClaimError] = useState<any | undefined>();
 
     const claimPolygonTokens = async(id: string, tokenAddress: string, amount: string, tokenName: string, tokenSymobl: string) => {
+        console.log("vlez")
+        setIsMetaMaskLoading(true);
         try {
             const owner = await library.getSigner();
             const messageHash = ethers.utils.solidityKeccak256(['string'], ["signed message to claim tokens"]);
@@ -35,8 +37,10 @@ const usePolygonBridge = (bridgeAddress: string) => {
             claimLocalStorage(id, tx.hash);
         } catch (error) {
             console.log(error);
+            setIsMetaMaskLoading(false);
             setClaimError(error);
         } finally {
+            setIsMetaMaskLoading(false);
             setIsClaimLoading(false);
         }
     }

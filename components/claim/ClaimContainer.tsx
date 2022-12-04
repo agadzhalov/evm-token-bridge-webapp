@@ -11,14 +11,26 @@ import { DataTable } from 'primereact/datatable';
 import { Column } from 'primereact/column';
 import { Button } from 'primereact/button';
 import { Card } from 'primereact/card';
+import { ProgressSpinner } from 'primereact/progressspinner';
 
 const ClaimContainer = () => {
     const { account, library, chainId } = useWeb3React();
 
     const [claimData, setClaimData] = useState<any | undefined>();
 
-    const { unlockEthereumTokens, isClaimLoading: isUnlockLoading, txHashClaim: txHashUnlock, claimError: unlockError } = useEthereumBridge(ETHEREUM_BRIDGE_GOERLI);
-    const { claimPolygonTokens, isClaimLoading, txHashClaim, claimError } = usePolygonBridge(POLYGON_BRIDGE_MUMBAI);
+    const { 
+        unlockEthereumTokens, 
+        isClaimLoading: isUnlockLoading, 
+        txHashClaim: txHashUnlock, 
+        claimError: unlockError,
+        metaMaskLoading: unlockMetaMaskLoading } = useEthereumBridge(ETHEREUM_BRIDGE_GOERLI);
+
+    const { 
+        claimPolygonTokens, 
+        isClaimLoading, 
+        txHashClaim, 
+        claimError,
+        metaMaskLoading: claimMetaMaskLoading } = usePolygonBridge(POLYGON_BRIDGE_MUMBAI);
 
     useEffect(() => {
         setClaimData(JSON.parse(localStorage.getItem("transferToken")));
@@ -59,20 +71,7 @@ const ClaimContainer = () => {
 
     return (
         <div className="results-form">
-
-            {isUnlockLoading && (
-                <Card className="claim-loading-card">
-                <PendingTX txHash={txHashUnlock} />
-                </Card>
-            )}
-
-            {isClaimLoading && (
-                <Card className="claim-loading-card">
-                    <PendingTX txHash={txHashClaim} />
-                </Card>
-            )}
-            
-            {!isUnlockLoading && !isClaimLoading && claimData && (
+            {!isUnlockLoading && !isClaimLoading && !claimMetaMaskLoading && !unlockMetaMaskLoading && claimData && (
             <DataTable 
                     value={getFilteredAndSortedDescData(claimData)} 
                     paginator 
@@ -82,7 +81,9 @@ const ClaimContainer = () => {
                 >
                 <Column field="from" header="From" ></Column>
                 <Column field="to" header="To" ></Column>
-                <Column field="token" header="Token"></Column>
+                <Column field="token" header="Token" body={(data) => (
+                    <>{data.symbol ? data.symbol : "----"} | {shortenHex(data.token, 15)}</>
+                )}></Column>
 
                 <Column field="amount" header="Amount"  body={(data) => (
                     ethers.utils.formatEther(data.amount)
@@ -108,6 +109,24 @@ const ClaimContainer = () => {
                     handleTxLink(data.claimTxHash, chainId == MUMBAI_CHAIN_ID ? GOERLI_CHAIN_ID : MUMBAI_CHAIN_ID)
                 )}></Column>
             </DataTable>
+            )}
+
+            {(claimMetaMaskLoading || unlockMetaMaskLoading) && (
+                <Card className="claim-loading-card">
+                    <ProgressSpinner style={{ width: '50px', height: '50px' }} strokeWidth="2" fill="var(--surface-ground)" animationDuration=".5s" />
+                </Card>
+            )}
+
+            {isUnlockLoading && (
+                <Card className="claim-loading-card">
+                    <PendingTX txHash={txHashUnlock} />
+                </Card>
+            )}
+
+            {isClaimLoading && (
+                <Card className="claim-loading-card">
+                    <PendingTX txHash={txHashClaim} />
+                </Card>
             )}
         </div>
     );

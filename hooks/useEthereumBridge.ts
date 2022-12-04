@@ -47,8 +47,10 @@ const useEthereumBridge = (bridgeAddress: string) => {
     const [claimError, setClaimError] = useState<any | undefined>();
 
     const unlockEthereumTokens = async(id: string, sourceToken: string, amount: string) => {
+        setIsMetaMaskLoading(true);
         try {
             const tx = await contract.unlock(sourceToken, amount);
+            setIsMetaMaskLoading(false);
             setIsClaimLoading(true);
             setTxHashClaim(tx.hash);
             await tx.wait();
@@ -56,9 +58,11 @@ const useEthereumBridge = (bridgeAddress: string) => {
             claimLocalStorage(id, tx.hash);
         } catch (error) {
             console.log(error);
+            setIsMetaMaskLoading(false);
             setClaimError(error);
         } finally {
             setIsClaimLoading(false);
+            setIsMetaMaskLoading(false);
         }
     }
 
