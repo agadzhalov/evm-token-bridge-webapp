@@ -14,7 +14,8 @@ import useTxsHistory from "../../hooks/useTxsHistory";
 import { formatEtherscanLink, formatPolygonscanLink } from "../../util";
 import Moment from 'react-moment';
 import { GOERLI_CHAIN_ID, MUMBAI_CHAIN_ID } from "../../constants/networks";
-
+import { DataTable } from 'primereact/datatable';
+import { Column } from 'primereact/column';
 
 const TransactionsHistory = () => {
     const { account, library, chainId } = useWeb3React();
@@ -50,43 +51,34 @@ const TransactionsHistory = () => {
 
     return (
         <div className="results-form">
-            <table>
-                <thead>
-                    <tr>
-                        <th>Time</th>
-                        <th>Hash</th>
-                        <th>From</th>
-                        <th>Inetracted With (To)</th>
-                        <th>Gas Price</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {txs && txs.map((tx, index) => {
-                        return (
-                        <tr key={index}>
-                            <td><Moment unix>{tx.timeStamp}</Moment></td>
-                            <td>{ link(tx.hash, "Transaction") }</td>
-                            <td>{ link(tx.from, "Account") }</td>
-                            <td>{ link(tx.to, "Account") }</td>
-                            <td>{ ethers.utils.formatEther(tx.gasPrice) }</td>
-                        </tr>
-                        )
-                    })}
-                </tbody>
-            </table>
-        <style jsx>{`
-            .results-form {
-                width: 1600px;
-                margin: 0 auto;
-            }
-            table tr td, table tr th{
-                border: 1px solid #000;
-            }
-            a {
-                color: blue;
-                text-decoration: underline;
-            }
-        `}</style>
+            <DataTable 
+                    value={txs} 
+                    paginator 
+                    responsiveLayout="scroll"
+                    stripedRows
+                    currentPageReportTemplate="Showing {first} to {last} of {totalRecords}" rows={10} rowsPerPageOptions={[10,20,50]}
+                >
+                <Column field="timeStamp" header="Date" className="link" body={(tx) => (
+                    <Moment unix>{tx.timeStamp}</Moment>
+                )}> 
+                </Column>
+                <Column field="hash" header="Hash" className="link" body={(tx) => (
+                    link(tx.hash, "Transaction") 
+                )}> 
+                </Column>
+                <Column field="from" header="From" className="link" body={(tx) => (
+                    link(tx.from, "Account") 
+                )}> 
+                </Column>
+                <Column field="to" header="To" className="link" body={(tx) => (
+                    link(tx.to, "Account") 
+                )}> 
+                </Column>
+                <Column field="gasPrice" header="Gas Price" className="link" body={(tx) => (
+                    ethers.utils.formatEther(tx.gasPrice)
+                )}> 
+                </Column>
+            </DataTable>
         </div>
     );
 };
