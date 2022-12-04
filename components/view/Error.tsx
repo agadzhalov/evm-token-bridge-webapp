@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { Card } from 'primereact/card';
 
 type ErrorProps = {
   error: any;
@@ -22,22 +23,10 @@ const Error = ({ error }: ErrorProps) => {
 
   return (
     formatedError && (
-    <div className="error">
-        { formatedError }
-        
-    <style jsx>{`
-        .error {
-            width: 50%;
-            background: #a94545;
-            color: white;
-            text-align: left;
-            margin: 0 auto;
-            margin-top: 20px;
-            padding: 15px;
-            font-weight: bold;
-            border-radius: 5px;
-        }
-      `}</style>
+    <div>
+        <Card style={{ background: "#a94545", color: "#fff", fontWeight: "bold",  marginBottom: "1em" }}>
+            { formatedError }
+        </Card>
     </div>
   ));
 };
