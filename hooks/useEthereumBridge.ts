@@ -15,15 +15,17 @@ const useEthereumBridge = (bridgeAddress: string) => {
     const [txHash, setTxHash] = useState<string | undefined>();
     const [isLoading, setIsLoading] = useState<boolean | undefined>(false);
     const [error, setError] = useState<any | undefined>();
-    
+    const [metaMaskLoading, setIsMetaMaskLoading] = useState<boolean | undefined>(false);
+
     const depositERC20 = async(networkToBridgeId: number, account: string, tokenAddres: string, name: string, symbol: string, amount: string) => {
+        setIsMetaMaskLoading(true);
         try {
             const owner = await library.getSigner();
             const deadline = ethers.constants.MaxUint256;
             const token =  new Contract(tokenAddres, BASE_TOKEN_ABI, library.getSigner(account));
             const {v, r, s} = await getPermitSignature(owner, token, bridgeAddress, amount, deadline);
             const tx = await contract.lock(tokenAddres, amount, deadline, v, r, s);
-            
+            setIsMetaMaskLoading(false);
             setIsLoading(true);
             setTxHash(tx.hash);
             await tx.wait();
@@ -32,8 +34,10 @@ const useEthereumBridge = (bridgeAddress: string) => {
             setError(null);
         } catch (error) {
             console.log(error)
+            setIsMetaMaskLoading(false);
             setError(error);
         } finally {
+            setIsMetaMaskLoading(false);
             setIsLoading(false);
         }
     }
@@ -58,7 +62,7 @@ const useEthereumBridge = (bridgeAddress: string) => {
         }
     }
 
-    return { depositERC20, txHash, isLoading, error,
+    return { depositERC20, txHash, isLoading, error, metaMaskLoading, 
         unlockEthereumTokens, txHashClaim, isClaimLoading, claimError };
 }
 

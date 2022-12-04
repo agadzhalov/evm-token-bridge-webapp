@@ -23,7 +23,17 @@ type Props = {
     sendERC20: any;
 };
 
-const TransferButton = ({name, symbol, amount, setAmount, networkToBridgeId, tokenAddress, depositERC20, sendERC20}: Props) => {
+const TransferButton = ({
+        name, 
+        symbol, 
+        amount, 
+        setAmount, 
+        networkToBridgeId, 
+        tokenAddress, 
+        depositERC20, 
+        sendERC20
+    }: Props) => {
+        
     const { account, library, chainId } = useWeb3React<Web3Provider>();
     const buttonTitle = chainId == GOERLI_CHAIN_ID ? "Transfer" : chainId == MUMBAI_CHAIN_ID ? "Send" : "Unknown";
 
@@ -45,6 +55,7 @@ const TransferButton = ({name, symbol, amount, setAmount, networkToBridgeId, tok
         <div className="results-form">
             <Button
             label={buttonTitle}
+            icon="pi pi-send"
             type="button" 
             className="mr-3 p-button-raised p-button-primary"
             onClick={() => handleOnClick()}

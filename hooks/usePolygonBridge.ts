@@ -16,6 +16,7 @@ const usePolygonBridge = (bridgeAddress: string) => {
 
     const [txHashClaim, setTxHashClaim] = useState<string | undefined>();
     const [isClaimLoading, setIsClaimLoading] = useState<boolean | undefined>(false);
+    const [metaMaskLoading, setIsMetaMaskLoading] = useState<boolean | undefined>(false);
     const [claimError, setClaimError] = useState<any | undefined>();
 
     const claimPolygonTokens = async(id: string, tokenAddress: string, amount: string, tokenName: string, tokenSymobl: string) => {
@@ -45,6 +46,7 @@ const usePolygonBridge = (bridgeAddress: string) => {
     const [sendError, setSendError] = useState<any | undefined>();
 
     const sendERC20 = async(account: string, tokenAddres: string, name: string, symbol: string, amount: string, networkToBridge: number) => {
+        setIsMetaMaskLoading(true);
         try {
             const owner = await library.getSigner();
             const sourceToken = await contract.getSourceTokenFromTarget(tokenAddres);
@@ -54,6 +56,7 @@ const usePolygonBridge = (bridgeAddress: string) => {
             const {v, r, s} = await getPermitSignature(owner, token, bridgeAddress, amount, deadline);
 
             const tx = await contract.destroyTokens(tokenAddres, amount, deadline, v, r, s);
+            setIsMetaMaskLoading(false);
             setIsSendLoading(true);
             setTxHashSend(tx.hash);
             await tx.wait();
@@ -61,13 +64,15 @@ const usePolygonBridge = (bridgeAddress: string) => {
             getNetworkName(chainId), getNetworkName(networkToBridge), tx.hash); // from goerli to mumbai
             setSendError(null);
         } catch (error) {
+            setIsMetaMaskLoading(false);
             setSendError(error);
         } finally {
             setIsSendLoading(false);
+            setIsMetaMaskLoading(false);
         }
     }
 
-    return { claimPolygonTokens, txHashClaim, isClaimLoading, claimError,
+    return { claimPolygonTokens, txHashClaim, isClaimLoading, claimError, metaMaskLoading, 
     sendERC20, txHashSend, isSendLoading, sendError  };
 }
 

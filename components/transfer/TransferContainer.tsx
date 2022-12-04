@@ -17,6 +17,7 @@ import { ETHEREUM_BRIDGE_GOERLI, POLYGON_BRIDGE_MUMBAI } from "../../constants";
 import PendingTX from "../view/PendingTX";
 import usePolygonBridge from "../../hooks/usePolygonBridge";
 import { Card } from 'primereact/card';
+import { ProgressSpinner } from 'primereact/progressspinner';
 
 const TransferContainer = () => {
     const { account, library, chainId } = useWeb3React<Web3Provider>();
@@ -27,8 +28,17 @@ const TransferContainer = () => {
     const [amount, setAmount] = useState<string | undefined>();
 
     const {name, symbol, balance} = useTokenDetails(tokenAddress, ERC20_ABI);
-    const { depositERC20, txHash: depositTxHash, isLoading: depositIsLoaidng, error: depositError } = useEthereumBridge(ETHEREUM_BRIDGE_GOERLI);
-    const { sendERC20, isSendLoading, txHashSend, sendError } = usePolygonBridge(POLYGON_BRIDGE_MUMBAI);
+    const { depositERC20, 
+            txHash: depositTxHash, 
+            isLoading: depositIsLoaidng, 
+            error: depositError, 
+            metaMaskLoading: transferMetaMaskLoading } = useEthereumBridge(ETHEREUM_BRIDGE_GOERLI);
+
+    const { sendERC20, 
+            isSendLoading, 
+            txHashSend, 
+            sendError,
+            metaMaskLoading: sendMetaMaskLoading } = usePolygonBridge(POLYGON_BRIDGE_MUMBAI);
 
     useEffect(() => {
         fetchIsTokenValid(tokenAddress);
@@ -37,24 +47,30 @@ const TransferContainer = () => {
     return (
         <div className="transfer">
             <Card style={{ marginBottom: '2em' }}>
-            {depositIsLoaidng && (<PendingTX txHash={depositTxHash} />)}
-            {isSendLoading && (<PendingTX txHash={txHashSend} />)}
-            {!depositIsLoaidng && !isSendLoading && (
-                <div>
-                <ChooseNetwork networkToBridge={networkToBridge} handleChooseNetwork={(networkToBridge) => setNetworkToBridge(networkToBridge) } />
-                <ChooseToken tokenAddress={tokenAddress} setTokenAddress={setTokenAddress} isTokenValid={isTokenValid} setIsTokenValid={setIsTokenValid} />
-                <ChooseAmount amount={amount} setAmount={setAmount} />
-                <TransferButton 
-                    name={name || undefined} 
-                    symbol={symbol || undefined} 
-                    amount={amount} 
-                    setAmount={setAmount}
-                    networkToBridgeId={networkToBridge}
-                    tokenAddress={tokenAddress}
-                    depositERC20={depositERC20}
-                    sendERC20={sendERC20} />
-                </div>
+            {!transferMetaMaskLoading && !sendMetaMaskLoading && (
+               <div>
+                {depositIsLoaidng && (<PendingTX txHash={depositTxHash} />)}
+                {isSendLoading && (<PendingTX txHash={txHashSend} />)}
+                {!depositIsLoaidng && !isSendLoading && (
+                    <div>
+                    <ChooseNetwork networkToBridge={networkToBridge} handleChooseNetwork={(networkToBridge) => setNetworkToBridge(networkToBridge) } />
+                    <ChooseToken tokenAddress={tokenAddress} setTokenAddress={setTokenAddress} isTokenValid={isTokenValid} setIsTokenValid={setIsTokenValid} />
+                    <ChooseAmount amount={amount} setAmount={setAmount} />
+                    <TransferButton 
+                        name={name || undefined} 
+                        symbol={symbol || undefined} 
+                        amount={amount} 
+                        setAmount={setAmount}
+                        networkToBridgeId={networkToBridge}
+                        tokenAddress={tokenAddress}
+                        depositERC20={depositERC20}
+                        sendERC20={sendERC20} />
+                    </div>
+                )}
+               </div> 
             )}
+            {transferMetaMaskLoading && (<ProgressSpinner style={{ width: '50px', height: '50px' }} strokeWidth="2" fill="var(--surface-ground)" animationDuration=".5s" />)}
+            {sendMetaMaskLoading && (<ProgressSpinner style={{ width: '50px', height: '50px' }} strokeWidth="2" fill="var(--surface-ground)" animationDuration=".5s" />)}
             </Card>
         </div>
     );
