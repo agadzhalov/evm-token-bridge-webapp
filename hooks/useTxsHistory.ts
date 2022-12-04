@@ -1,7 +1,5 @@
 import { useWeb3React } from "@web3-react/core";
-import { useState } from "react";
-import { BaseToken, ERC20, EthereumBridge } from "../contracts/types";
-import axios from 'axios';
+import { GOERLI_CHAIN_ID, MUMBAI_CHAIN_ID } from "../constants/networks";
 
 const useTxsHistory = () => {
     const { account, library, chainId } = useWeb3React();
@@ -22,18 +20,18 @@ const useTxsHistory = () => {
 
     const getApiKeyByNetwork = (chainId: number): string => {
         switch(chainId) {
-            case 5:
+            case GOERLI_CHAIN_ID:
                 return "SVYXT4XWRYNRM64HZGE9B5E6D9RYPKK3YW"; //process.env.GOERLI_API_KEY - webpack nextjs config needed
-            case 80001: 
+            case MUMBAI_CHAIN_ID: 
                 return "APGQID4FXH2KFZ4J57AW2YH4XEXSB3KI51"; //process.env.MUMBAI_API_KEY
         }     
     }
 
     const getScanByNetworkId = (chainId: number) : string => {
         switch(chainId) {
-            case 5:
+            case GOERLI_CHAIN_ID:
                 return "https://api-goerli.etherscan.io/";
-            case 80001: 
+            case MUMBAI_CHAIN_ID: 
                 return "https://api-mumbai.polygonscan.com/";
         }    
     }
